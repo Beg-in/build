@@ -1,0 +1,122 @@
+{
+  "name": "begin-build",
+  "version": "0.1.0",
+  "scripts": {
+    "// REFERENCE SCRIPT b": "CONTEXT=$(pwd) npm explore begin-build -- npm run",
+    "pwd": "pwd; cd $CONTEXT; pwd",
+    "postgres": "postgres",
+    "redis": "redis-server",
+    "client": "webpack-dev-server --host ${IP:=0.0.0.0} --config webpack.config.js --env.stage=local --env.port=${PORT:=8080} --env.context=$CONTEXT --progress",
+    "watch:client": "nodemon --watch $CONTEXT/yarn.lock --watch webpack.config.js",
+    "local:client": "npm run watch:client -- --exec 'npm run client'",
+    "local:server": "cd $CONTEXT; STAGE=local PORT=$((${PORT:-8080}+1)) nodemon --exec 'node --inspect index.js' --watch properties.json --watch yarn.lock --watch src/server",
+    "start": "nf run run-p local:*",
+    "begin": "run-p postgres redis start",
+    "test:watch": "cd $CONTEXT; ava -w src/**/*.test.js",
+    "test:tap": "cd $CONTEXT; ava --tap src/**/*.test.js",
+    "docs:client": "cd $CONTEXT; mkdir -p docs && jsdoc2md -f src/client/**/*.js > docs/client.md",
+    "docs:readme": "cd $CONTEXT; jsdoc2md --template src/resources/build/readme.hbs --files *.js > README.md",
+    "docs": "run-p docs:*",
+    "// ========== CLOUD9 ==========": "",
+    "c9:client": "npm run watch:client -- --exec 'npm run client -- --public $C9_HOSTNAME'",
+    "c9": "API_URL=https://$C9_HOSTNAME nf run run-p postgres redis c9:* local:server",
+    "// ========== DEPLOYMENT ==========": "",
+    "build": "rm -rf $CONTEXT/www; webpack --config webpack.config.js --env.context=$CONTEXT --display-error-details",
+    "build:dev": "npm run build -- --env.stage=dev",
+    "build:prd": "npm run build -- --env.stage=production",
+    "server": "cd $CONTEXT; pm2 start index.js --name BEGIN_SERVER && pm2 logs",
+    "// ========== PROJECT ===========": "",
+    "b": "CONTEXT=${CONTEXT:=$(pwd)} npm explore begin-project -- npm run",
+    "lint": "npm run b lint",
+    "lint:pug": "npm run b lint:pug",
+    "changelog": "npm run b changelog",
+    "docs": "npm run b docs",
+    "test:watch": "npm run b test:watch",
+    "test:tap": "npm run b test:tap",
+    "cz": "cz"
+  },
+  "description": "Build tools for Beg.in",
+  "engines": {
+    "node": ">=7.6"
+  },
+  "main": "webpack.config.js",
+  "repository": "Beg-in/build",
+  "author": {
+    "name": "Beg.in",
+    "email": "info@beg.in",
+    "url": "http://beg.in"
+  },
+  "contributors": [
+    "Brian Jesse <brian.jesse@gmail.com> (brianjesse.com)"
+  ],
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Beg-in/build/issues"
+  },
+  "homepage": "https://github.com/Beg-in/build#readme",
+  "dependencies": {
+    "autoprefixer": "7.1.4",
+    "autoprefixer-loader": "3.2.0",
+    "ava": "0.22.0",
+    "axios": "0.16.2",
+    "babel-core": "6.26.0",
+    "babel-loader": "7.1.2",
+    "babel-polyfill": "6.26.0",
+    "babel-preset-env": "1.6.0",
+    "begin-project": "0.1.1",
+    "begin-util": "1.0.0",
+    "css-loader": "0.28.7",
+    "extract-text-webpack-plugin": "3.0.0",
+    "file-loader": "0.11.2",
+    "foreman": "2.0.0",
+    "html-webpack-plugin": "2.30.1",
+    "image-webpack-loader": "3.4.2",
+    "imagemin": "5.3.1",
+    "imagemin-optipng": "5.2.1",
+    "imagemin-pngquant": "5.0.1",
+    "jsdoc-babel": "0.3.0",
+    "jsdoc-to-markdown": "3.0.0",
+    "json-loader": "0.5.7",
+    "node-sass": "4.5.3",
+    "nodemon": "1.12.0",
+    "npm-run-all": "4.1.1",
+    "optimize-css-assets-webpack-plugin": "3.1.1",
+    "postcss-loader": "2.0.6",
+    "pug": "^2.0.0-rc.2",
+    "pug-loader": "2.3.0",
+    "regenerator-runtime": "0.11.0",
+    "resource-hints-webpack-plugin": "0.0.1",
+    "sass-loader": "6.0.6",
+    "style-loader": "0.18.2",
+    "svg-inline-loader": "0.8.0",
+    "url-loader": "0.5.9",
+    "vue-loader": "13.0.4",
+    "vue-template-compiler": "2.4.3",
+    "webpack": "3.5.6",
+    "webpack-dev-server": "2.8.1"
+  },
+  "babel": {
+    "presets": [
+      [
+        "env",
+        {
+          "targets": {
+            "browsers": [
+              "last 2 versions"
+            ]
+          },
+          "useBuiltIns": true
+        }
+      ]
+    ]
+  },
+  "postcss": {
+    "plugins": {
+      "autoprefixer": {
+        "browsers": [
+          "last 2 versions"
+        ]
+      }
+    }
+  }
+}
