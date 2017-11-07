@@ -6,6 +6,8 @@ let assignDeep = require('begin-util/assign-deep');
 let path = require('path');
 let webpack = require('webpack');
 
+const MAIN = './index.js';
+
 module.exports = ({
   context = process.cwd(),
   stage = 'production',
@@ -14,20 +16,39 @@ module.exports = ({
 } = {}) => {
   let isLocal = stage === 'local';
   /* eslint-disable import/no-dynamic-require */
-  let props = require(`${context}/properties`);
+  let base = require.resolve(MAIN, { paths: [
+    path.join(context, 'src/client'),
+    path.join(context, 'src/'),
+    context,
+  ] });
+  base = base.substring(0, base.lastIndexOf('/'));
+  let props;
+  try {
+    props = require(`${context}/properties`);
+  } catch (e) {
+    props = { domain: require(`${context}/package`).domain };
+  }
   /* eslint-enable import/no-dynamic-require */
   const DOMAIN = props.domain;
   props = assignDeep(props.base || {}, props[stage] || {}).client || {};
-  props.cdn = isLocal ? '/' : `https://cdn.${DOMAIN}/`;
-  props.api = `https://api.${DOMAIN}/v1/`;
-  if (isLocal) {
-    props.api = `http://${process.env.API_URL || 'localhost'}:${~~port + 1}/v1/`;
-  }
+  props = Object.assign({
+    cdn: `https://cdn.${DOMAIN}/`,
+    api: `https://api.${DOMAIN}/v1/`,
+  }, props, !isLocal ? {} : {
+    cdn: '/',
+    api: `http://${process.env.API_URL || 'localhost'}:${~~port + 1}/v1/`,
+  });
   props.stage = stage;
+
+  let modules = [
+    path.join(context, 'node_modules'),
+    path.join(__dirname, 'node_modules'),
+    'node_modules',
+  ];
 
   let config = {
     devtool: `cheap-module${isLocal ? '-eval' : ''}-source-map`,
-    entry: path.join(context, 'src/client/index.js'),
+    entry: path.join(base, MAIN),
     // context,
     output: {
       path: path.join(context, 'www'),
@@ -74,23 +95,20 @@ module.exports = ({
         },
       }),
       new webpack.optimize.OccurrenceOrderPlugin(),
-      new HtmlWebpackPlugin({
-        template: path.join(context, 'src/client/index.pug'),
-        favicon: path.join(context, 'src/client/images/favicon.ico'),
+      new HtmlWebpackPlugin(Object.assign({
+        template: path.join(base, './index.pug'),
+        favicon: path.join(base, './favicon.png'),
         inject: 'body',
         filename: 'index.html',
         isCordova,
         preload: ['*.js', '*.css'],
-      }),
+      }, props)),
       new ResourceHintWebpackPlugin(),
       new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
     ],
     resolve: {
       // mainFields: ['jsnext:main', 'main'],
-      modules: [
-        'node_modules',
-        path.join(context, 'node_modules'),
-      ],
+      modules,
       alias: {
         vue: 'vue/dist/vue.js',
       },
@@ -103,12 +121,36 @@ module.exports = ({
     options: {
       loaders: {
         js: 'babel-loader',
-        sass: `${isLocal ? 'style-loader!' : ''}css-loader?sourceMap!postcss-loader?sourceMap!sass-loader?sourceMap`,
+        sass: [{
+          loader: 'css-loader',
+          options: { sourceMap: true },
+        }, {
+          loader: 'postcss-loader',
+          options: {
+            sourceMap: true,
+            config: {
+              ctx: {
+                autoprefixer: { browsers: ['last 2 versions'] },
+              },
+            },
+          },
+        }, {
+          loader: 'sass-loader',
+          options: {
+            sourceMap: true,
+            includePaths: modules,
+          },
+        }],
+        // `${isLocal ? 'style-loader!' : ''}css-loader?sourceMap!postcss-loader?sourceMap!sass-loader?sourceMap`,
       },
     },
   };
 
   if (isLocal) {
+    vueLoader.options.loaders.sass.unshift({
+      loader: 'style-loader',
+      options: { sourceMap: true },
+    });
     config.module.rules.unshift(vueLoader);
     config.plugins.push(new webpack.HotModuleReplacementPlugin());
     config.plugins.push(new webpack.NoEmitOnErrorsPlugin());
