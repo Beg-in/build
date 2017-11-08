@@ -1,6 +1,25 @@
 {
   "name": "begin-build",
+  "main": "index.js",
   "version": "0.1.2",
+  "engines": {
+    "node": ">=8.9"
+  },
+  "description": "Build tools for Beg.in",
+  "homepage": "https://github.com/Beg-in/build#readme",
+  "repository": "Beg-in/build",
+  "bugs": {
+    "url": "https://github.com/Beg-in/build/issues"
+  },
+  "author": {
+    "name": "Beg.in",
+    "email": "info@beg.in",
+    "url": "http://beg.in"
+  },
+  "contributors": [
+    "Brian Jesse <brian.jesse@gmail.com> (brianjesse.com)"
+  ],
+  "license": "MIT",
   "scripts": {
     "// REFERENCE SCRIPT b": "CONTEXT=$(pwd) npm explore begin-build -- npm run",
     "pwd": "pwd; cd $CONTEXT; pwd",
@@ -32,25 +51,6 @@
     "changelog": "npm run b changelog",
     "cz": "cz"
   },
-  "description": "Build tools for Beg.in",
-  "engines": {
-    "node": ">=7.6"
-  },
-  "main": "index.js",
-  "repository": "Beg-in/build",
-  "author": {
-    "name": "Beg.in",
-    "email": "info@beg.in",
-    "url": "http://beg.in"
-  },
-  "contributors": [
-    "Brian Jesse <brian.jesse@gmail.com> (brianjesse.com)"
-  ],
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/Beg-in/build/issues"
-  },
-  "homepage": "https://github.com/Beg-in/build#readme",
   "dependencies": {
     "autoprefixer": "^7.1.6",
     "autoprefixer-loader": "3.2.0",

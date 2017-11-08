@@ -1,7 +1,7 @@
 require('babel-polyfill');
 let Vue = require('vue');
 let VueRouter = require('vue-router').default;
-let glyph = require('./glyph/component.vue').default;
+let svg = require('./svg-loader/component.vue').default;
 // HACK: VueRouter exports an ES6 module and doesn't support CommonJS
 
 module.exports = app => {
@@ -10,7 +10,7 @@ module.exports = app => {
   Vue.use(VueRouter);
   delete app.router;
 
-  Vue.component('glyph', glyph);
+  Vue.component('svg-loader', svg);
 
   let vm = new Vue(Object.assign({}, app, {
     router,
