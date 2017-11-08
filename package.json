@@ -1,6 +1,6 @@
 {
   "name": "begin-build",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "scripts": {
     "// REFERENCE SCRIPT b": "CONTEXT=$(pwd) npm explore begin-build -- npm run",
     "pwd": "pwd; cd $CONTEXT; pwd",

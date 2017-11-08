@@ -1,3 +1,13 @@
+<a name="0.1.2"></a>
+## [0.1.2](https://github.com/Beg-in/build/compare/0.1.1...0.1.2) (2017-11-08)
+
+
+### Features
+
+* **webpack:** add vue-router and default html template ([41bcbc1](https://github.com/Beg-in/build/commit/41bcbc1))
+
+
+
 <a name="0.1.1"></a>
 ## [0.1.1](https://github.com/Beg-in/build/compare/0.1.0...0.1.1) (2017-11-07)
 
