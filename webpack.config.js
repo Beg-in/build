@@ -32,6 +32,7 @@ module.exports = ({
   const DOMAIN = props.domain;
   props = assignDeep(props.base || {}, props[stage] || {}).client || {};
   props = Object.assign({
+    isCordova,
     cdn: `https://cdn.${DOMAIN}/`,
     api: `https://api.${DOMAIN}/v1/`,
   }, props, !isLocal ? {} : {
@@ -95,14 +96,14 @@ module.exports = ({
         },
       }),
       new webpack.optimize.OccurrenceOrderPlugin(),
-      new HtmlWebpackPlugin(Object.assign({
+      new HtmlWebpackPlugin({
         template: path.join(base, './index.pug'),
         favicon: path.join(base, './favicon.png'),
         inject: 'body',
         filename: 'index.html',
-        isCordova,
         preload: ['*.js', '*.css'],
-      }, props)),
+        props,
+      }),
       new ResourceHintWebpackPlugin(),
       new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
     ],

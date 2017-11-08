@@ -36,7 +36,7 @@
   "engines": {
     "node": ">=7.6"
   },
-  "main": "webpack.config.js",
+  "main": "index.js",
   "repository": "Beg-in/build",
   "author": {
     "name": "Beg.in",
@@ -90,6 +90,7 @@
     "url-loader": "^0.6.2",
     "vue": "^2.5.3",
     "vue-loader": "^13.4.0",
+    "vue-router": "3.0.1",
     "vue-template-compiler": "^2.5.3",
     "webpack": "^3.8.1",
     "webpack-dev-server": "^2.9.4"
@@ -109,13 +110,6 @@
       ]
     ]
   },
-  "postcss": {
-    "plugins": {
-      "autoprefixer": {
-        "browsers": [
-          "last 2 versions"
-        ]
-      }
-    }
-  }
+  "// HACK: postcss-loader must have config": "",
+  "postcss": {}
 }

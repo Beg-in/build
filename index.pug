@@ -1,0 +1,16 @@
+doctype html
+- const props = locals.htmlWebpackPlugin.options.props;
+html.controls.theme
+  head
+    title
+      block title
+        | #{props.title}
+    block meta
+      meta(charset="utf-8")
+      meta(name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no")
+      meta(name="HandheldFriendly" content="true")
+      meta(name="theme-color", content=`${props.color}`)
+  body
+    block body
+      #app
+    block scripts
