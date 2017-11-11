@@ -30,14 +30,17 @@ module.exports = ({
   }
   /* eslint-enable import/no-dynamic-require */
   const DOMAIN = props.domain;
+  const devRoot = `http://${process.env.API_URL || 'localhost'}`;
   props = assignDeep(props.base || {}, props[stage] || {}).client || {};
   props = Object.assign({
     isCordova,
     cdn: `https://cdn.${DOMAIN}/`,
     api: `https://api.${DOMAIN}/v1/`,
+    root: `https://${DOMAIN}/`,
   }, props, !isLocal ? {} : {
     cdn: '/',
-    api: `http://${process.env.API_URL || 'localhost'}:${~~port + 1}/v1/`,
+    api: `${devRoot}:${~~port + 1}/v1/`,
+    root: `${devRoot}:${~~port}/`,
   });
   props.stage = stage;
 
@@ -66,6 +69,9 @@ module.exports = ({
           test: /\.js$/,
           exclude: /node_modules\/(?!begin-)/,
           loader: 'babel-loader',
+          options: {
+            presets: [['env', { targets: { browsers: ['last 2 versions'] }, useBuiltIns: true }]],
+          },
         },
         {
           test: /\.svg$/,
@@ -116,12 +122,16 @@ module.exports = ({
     },
   };
 
+  // CSS Modules
+  // https://github.com/vuejs/vue-loader/issues/454
+  // https://github.com/css-modules/css-modules/issues/70
+  // https://github.com/css-modules/css-modules
+  // https://github.com/css-modules/postcss-modules
   let vueLoader = {
     test: /\.vue$/,
     loader: 'vue-loader',
     options: {
       loaders: {
-        js: 'babel-loader',
         sass: [{
           loader: 'css-loader',
           options: { sourceMap: true },
@@ -163,13 +173,13 @@ module.exports = ({
       stats: 'minimal',
     };
   } else {
-    let ExtractTextPlugin = require('extract-text-webpack-plugin');
+    // let ExtractTextPlugin = require('extract-text-webpack-plugin');
     let OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 
-    config.plugins.push(new ExtractTextPlugin('[hash].min.css'));
-    vueLoader.options.loaders.sass = ExtractTextPlugin.extract({
-      loader: vueLoader.options.loaders.sass,
-    });
+    // config.plugins.push(new ExtractTextPlugin('[hash].min.css'));
+    // vueLoader.options.loaders.sass = ExtractTextPlugin.extract({
+    //   loader: vueLoader.options.loaders.sass,
+    // });
     config.module.rules.unshift(vueLoader);
     config.plugins.push(new OptimizeCssAssetsPlugin({
       cssProcessorOptions: {

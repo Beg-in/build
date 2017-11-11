@@ -40,7 +40,7 @@
     "c9:client": "npm run watch:client -- --exec 'npm run client -- --public $C9_HOSTNAME'",
     "c9": "API_URL=https://$C9_HOSTNAME nf run run-p postgres redis c9:* local:server",
     "// ========== DEPLOYMENT ==========": "",
-    "build": "rm -rf $CONTEXT/www; webpack --config webpack.config.js --env.context=$CONTEXT --display-error-details",
+    "build": "(rm -rf $CONTEXT/www || true); webpack --config webpack.config.js --env.context=$CONTEXT --display-error-details",
     "build:dev": "npm run build -- --env.stage=dev",
     "build:prd": "npm run build -- --env.stage=production",
     "server": "cd $CONTEXT; pm2 start index.js --name BEGIN_SERVER && pm2 logs",
@@ -94,21 +94,6 @@
     "vue-template-compiler": "^2.5.3",
     "webpack": "^3.8.1",
     "webpack-dev-server": "^2.9.4"
-  },
-  "babel": {
-    "presets": [
-      [
-        "env",
-        {
-          "targets": {
-            "browsers": [
-              "last 2 versions"
-            ]
-          },
-          "useBuiltIns": true
-        }
-      ]
-    ]
   },
   "// HACK: postcss-loader must have config": "",
   "postcss": {}
