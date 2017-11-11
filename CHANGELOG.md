@@ -1,3 +1,13 @@
+<a name="0.1.4"></a>
+## [0.1.4](https://github.com/Beg-in/build/compare/0.1.3...0.1.4) (2017-11-11)
+
+
+### Features
+
+* **vue:** add props fix history mode ([444ec75](https://github.com/Beg-in/build/commit/444ec75))
+
+
+
 <a name="0.1.3"></a>
 ## [0.1.3](https://github.com/Beg-in/build/compare/0.1.2...0.1.3) (2017-11-08)
 
