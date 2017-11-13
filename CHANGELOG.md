@@ -1,3 +1,13 @@
+<a name="0.1.5"></a>
+## [0.1.5](https://github.com/Beg-in/build/compare/0.1.4...0.1.5) (2017-11-13)
+
+
+### Bug Fixes
+
+* **css:** extract webpack plugin schema ([4b56f06](https://github.com/Beg-in/build/commit/4b56f06))
+
+
+
 <a name="0.1.4"></a>
 ## [0.1.4](https://github.com/Beg-in/build/compare/0.1.3...0.1.4) (2017-11-11)
 
