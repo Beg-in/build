@@ -1,7 +1,6 @@
 'use strict';
 
 let HtmlWebpackPlugin = require('html-webpack-plugin');
-let ResourceHintWebpackPlugin = require('resource-hints-webpack-plugin');
 let assignDeep = require('begin-util/assign-deep');
 let path = require('path');
 let webpack = require('webpack');
@@ -15,7 +14,6 @@ module.exports = ({
   isCordova = false,
 } = {}) => {
   let isLocal = stage === 'local';
-  /* eslint-disable import/no-dynamic-require */
   let base = require.resolve(MAIN, { paths: [
     path.join(context, 'src/client'),
     path.join(context, 'src/'),
@@ -23,12 +21,13 @@ module.exports = ({
   ] });
   base = base.substring(0, base.lastIndexOf('/'));
   let props;
+  /* eslint-disable import/no-dynamic-require */
   try {
     props = require(`${context}/properties`);
   } catch (e) {
     props = { domain: require(`${context}/package`).domain };
   }
-  /* eslint-enable import/no-dynamic-require */
+  /* eslint-enable */
   const DOMAIN = props.domain;
   const devRoot = `http://${process.env.API_URL || 'localhost'}`;
   props = assignDeep(props.base || {}, props[stage] || {}).client || {};
@@ -50,87 +49,38 @@ module.exports = ({
     'node_modules',
   ];
 
+  let targets = { browsers: ['last 2 versions'] };
+
   let options = {
-    presets: [['env', { targets: { browsers: ['last 2 versions'] }, useBuiltIns: true }]],
+    presets: [['env', { targets, useBuiltIns: true }]],
   };
 
-  let config = {
-    devtool: `cheap-module${isLocal ? '-eval' : ''}-source-map`,
-    entry: path.join(base, MAIN),
-    // context,
-    output: {
-      path: path.join(context, 'www'),
-      publicPath: props.cdn,
-      filename: '[hash].min.js',
-    },
-    module: {
-      rules: [
-        {
-          test: /\.pug$/,
-          loader: 'pug-loader',
+  let pug = {
+    loader: 'pug-html-loader',
+    options: {
+      pretty: true,
+      data: { props },
+      plugins: {
+        resolve(filename, source) {
+          let opts = { paths: [path.dirname(source)] };
+          if (filename.indexOf('~') === 0) {
+            filename = filename.substring(1);
+            opts.paths = modules;
+          }
+          return require.resolve(filename, opts);
         },
-        {
-          test: /\.js$/,
-          exclude: /node_modules\/(?!begin-)/,
-          loader: 'babel-loader',
-          options,
-        },
-        {
-          test: /\.svg$/,
-          loader: 'svg-inline-loader',
-        },
-        {
-          test: /\.(jpe?g|png|gif)$/,
-          use: [
-            'file-loader',
-            'image-webpack-loader?bypassOnDebug',
-          ],
-        },
-        {
-          test: /\.ttf$/,
-          loader: 'file-loader',
-        },
-        {
-          test: /\.md$/,
-          loader: 'vue-markdown-loader',
-        },
-      ],
-    },
-    plugins: [
-      new webpack.DefinePlugin({
-        'process.env': {
-          NODE_ENV: `"${stage}"`,
-          PROPS: `${JSON.stringify(props)}`,
-        },
-      }),
-      new webpack.optimize.OccurrenceOrderPlugin(),
-      new HtmlWebpackPlugin({
-        template: path.join(base, './index.pug'),
-        favicon: path.join(base, './favicon.png'),
-        inject: 'body',
-        filename: 'index.html',
-        preload: ['*.js', '*.css'],
-        props,
-      }),
-      new ResourceHintWebpackPlugin(),
-      new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
-    ],
-    resolve: {
-      // mainFields: ['jsnext:main', 'main'],
-      modules,
-      alias: {
-        vue: 'vue/dist/vue.js',
       },
     },
   };
 
-  // CSS Modules
-  // https://github.com/vuejs/vue-loader/issues/454
-  // https://github.com/css-modules/css-modules/issues/70
-  // https://github.com/css-modules/css-modules
-  // https://github.com/css-modules/postcss-modules
+  let python = [{
+    loader: 'babel-loader',
+    options,
+  }, {
+    loader: 'javascripthon-loader',
+  }];
+
   let vueLoader = {
-    test: /\.vue$/,
     loader: 'vue-loader',
     options: {
       loaders: {
@@ -138,16 +88,21 @@ module.exports = ({
           loader: 'babel-loader',
           options,
         },
+        pug: ['html-loader', pug],
+        python,
         sass: [{
           loader: 'css-loader',
-          options: { sourceMap: true },
+          options: {
+            sourceMap: true,
+            importLoaders: 2,
+          },
         }, {
           loader: 'postcss-loader',
           options: {
             sourceMap: true,
             config: {
               ctx: {
-                autoprefixer: { browsers: ['last 2 versions'] },
+                autoprefixer: targets,
               },
             },
           },
@@ -162,14 +117,76 @@ module.exports = ({
     },
   };
 
+  let config = {
+    entry: path.join(base, MAIN),
+    output: {
+      path: path.join(context, 'www'),
+      publicPath: props.cdn,
+      filename: '[hash].min.js',
+    },
+    module: {
+      rules: [{
+        test: /(?<!vue)\.pug$/,
+        loaders: ['html-loader', pug],
+      }, {
+        test: /\.js$/,
+        exclude: /node_modules\/(?!begin-)/,
+        loader: 'babel-loader',
+        options,
+      }, {
+        test: /\.py$/,
+        loaders: python,
+      }, {
+        test: /\.svg$/,
+        loader: 'vue-svg-loader',
+      }, {
+        test: /\.(jpe?g|png|gif)$/,
+        use: ['file-loader', 'image-webpack-loader?bypassOnDebug'],
+      }, {
+        test: /\.ttf$/,
+        loader: 'file-loader',
+      }, {
+        test: /\.md$/,
+        loader: 'vue-markdown-loader',
+      }, {
+        test: /\.vue$/,
+        loader: vueLoader,
+      }, {
+        test: /vue\.pug$/,
+        loaders: [vueLoader, pug],
+      }],
+    },
+    plugins: [
+      new webpack.DefinePlugin({
+        'process.env': {
+          NODE_ENV: `"${stage}"`,
+          PROPS: `${JSON.stringify(props)}`,
+        },
+      }),
+      new webpack.optimize.OccurrenceOrderPlugin(),
+      new HtmlWebpackPlugin({
+        template: path.join(base, './index.pug'),
+        favicon: path.join(base, './favicon.png'),
+        inject: 'body',
+        filename: 'index.html',
+        props,
+      }),
+      new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
+    ],
+    resolve: {
+      modules,
+      alias: {
+        vue: 'vue/dist/vue.js',
+      },
+    },
+  };
+
   let fallback = {
     loader: 'style-loader',
-    options: { sourceMap: true },
   };
 
   if (isLocal) {
     vueLoader.options.loaders.sass.unshift(fallback);
-    config.module.rules.unshift(vueLoader);
     config.plugins.push(new webpack.HotModuleReplacementPlugin());
     config.plugins.push(new webpack.NoEmitOnErrorsPlugin());
     config.performance = false;
@@ -180,15 +197,14 @@ module.exports = ({
       stats: 'minimal',
     };
   } else {
+    config.devtool = 'source-map';
     let ExtractTextPlugin = require('extract-text-webpack-plugin');
     let OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
-
     config.plugins.push(new ExtractTextPlugin('[hash].min.css'));
     vueLoader.options.loaders.sass = ExtractTextPlugin.extract({
       use: vueLoader.options.loaders.sass,
       fallback,
     });
-    config.module.rules.unshift(vueLoader);
     config.plugins.push(new OptimizeCssAssetsPlugin({
       cssProcessorOptions: {
         discardComments: {
@@ -203,7 +219,7 @@ module.exports = ({
       output: {
         comments: false,
       },
-      sourceMap: true,
+      // sourceMap: true,
     }));
   }
 

@@ -1,9 +1,6 @@
 require('babel-polyfill');
 let Vue = require('vue');
 
-// HACK: VueRouter exports an ES6 module and doesn't support CommonJS
-Vue.component('svg-loader', require('./svg-loader/component.vue').default);
-
 module.exports = app => {
   let component = { template: '<app></app>' };
   let out = {};

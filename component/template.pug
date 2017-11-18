@@ -1,0 +1,19 @@
+mixin global(src)
+  style(src=src, lang="sass")&attributes(attributes)
+
+mixin style(src)
+  style(src=src, lang="sass", scoped="")&attributes(attributes)
+
+mixin template(src)
+  template(src=src, lang="pug")&attributes(attributes)
+
+mixin script(src)
+  script(src=src)&attributes(attributes)
+
+block content
+  block scripts
+    +script("./index.js")
+  block templates
+    +template("./template.pug")
+  block styles
+    +style("./style.sass")
