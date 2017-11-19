@@ -92,6 +92,7 @@ module.exports = ({
   let vueLoader = {
     loader: 'vue-loader',
     options: {
+      esModule: false,
       loaders: {
         js: {
           loader: 'babel-loader',
@@ -188,6 +189,8 @@ module.exports = ({
       modules,
       alias: {
         vue: 'vue/dist/vue.js',
+        // HACK: VueRouter exports an ES6 module
+        'vue-router': 'vue-router/dist/vue-router.common.js',
       },
     },
   };

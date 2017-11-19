@@ -1,10 +1,20 @@
+<a name="0.3.0"></a>
+# [0.3.0](https://github.com/Beg-in/build/compare/0.2.2...0.3.0) (2017-11-19)
+
+
+### Features
+
+* **components:** add external for links ([b85293d](https://github.com/Beg-in/build/commit/b85293d))
+
+
+
 <a name="0.2.2"></a>
 ## [0.2.2](https://github.com/Beg-in/build/compare/0.2.1...0.2.2) (2017-11-19)
 
 
 ### Reverts
 
-* **webpack:** back to html-loader ([2e68b04](https://github.com/Beg-in/build/commit/2e68b04))
+* **webpack:** back to html-loader ([96036c6](https://github.com/Beg-in/build/commit/96036c6))
 
 
 

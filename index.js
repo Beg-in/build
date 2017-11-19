@@ -2,7 +2,8 @@
 
 require('babel-polyfill');
 let Vue = require('vue');
-let VueRouter = require('vue-router').default;
+let VueRouter = require('vue-router');
+let external = require('./external/vue.pug');
 
 module.exports = app => {
   let component = { template: '<app></app>' };
@@ -15,6 +16,7 @@ module.exports = app => {
     component.router = router;
     out.router = router;
   }
+  Vue.component('external', external);
   let vm = new Vue(Object.assign({}, app, component));
   vm.$mount('#app');
   out.vm = vm;
