@@ -4,6 +4,8 @@ let HtmlWebpackPlugin = require('html-webpack-plugin');
 let assignDeep = require('begin-util/assign-deep');
 let path = require('path');
 let webpack = require('webpack');
+let ExtractTextPlugin = require('extract-text-webpack-plugin');
+let OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 
 const MAIN = './index.js';
 
@@ -21,16 +23,24 @@ module.exports = ({
   ] });
   base = base.substring(0, base.lastIndexOf('/'));
   let props;
-  /* eslint-disable import/no-dynamic-require */
+
+  /*
+     eslint-disable
+     global-require,
+     import/no-dynamic-require,
+     security/detect-non-literal-require,
+     security/detect-object-injection
+  */
   try {
     props = require(`${context}/properties`);
   } catch (e) {
     props = { domain: require(`${context}/package`).domain };
   }
+  props = assignDeep(props.base || {}, props[stage] || {}).client || {};
   /* eslint-enable */
+
   const DOMAIN = props.domain;
   const devRoot = `http://${process.env.API_URL || 'localhost'}`;
-  props = assignDeep(props.base || {}, props[stage] || {}).client || {};
   props = Object.assign({
     isCordova,
     cdn: `https://cdn.${DOMAIN}/`,
@@ -126,7 +136,9 @@ module.exports = ({
     },
     module: {
       rules: [{
+        /* eslint-disable security/detect-unsafe-regex */
         test: /(?<!vue)\.pug$/,
+        /* eslint-enable */
         loaders: ['html-loader', pug],
       }, {
         test: /\.js$/,
@@ -198,8 +210,6 @@ module.exports = ({
     };
   } else {
     config.devtool = 'source-map';
-    let ExtractTextPlugin = require('extract-text-webpack-plugin');
-    let OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
     config.plugins.push(new ExtractTextPlugin('[hash].min.css'));
     vueLoader.options.loaders.sass = ExtractTextPlugin.extract({
       use: vueLoader.options.loaders.sass,

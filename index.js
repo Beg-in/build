@@ -1,11 +1,13 @@
+/* eslint-disable strict */
+
 require('babel-polyfill');
 let Vue = require('vue');
+let VueRouter = require('vue-router').default;
 
 module.exports = app => {
   let component = { template: '<app></app>' };
   let out = {};
   if (app.router) {
-    let VueRouter = require('vue-router').default;
     // TODO: merge with mode when mobile is added
     let router = new VueRouter(Object.assign({ mode: 'history' }, app.router));
     Vue.use(VueRouter);

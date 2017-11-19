@@ -1,3 +1,18 @@
+<a name="0.2.0"></a>
+# [0.2.0](https://github.com/Beg-in/build/compare/0.1.5...0.2.0) (2017-11-19)
+
+
+### Features
+
+* **webpack:** add python support and vue files in pug ([5d3d0b1](https://github.com/Beg-in/build/commit/5d3d0b1))
+
+
+### Reverts
+
+* **scripts:** remove docs ([eacc8b1](https://github.com/Beg-in/build/commit/eacc8b1))
+
+
+
 <a name="0.1.5"></a>
 ## [0.1.5](https://github.com/Beg-in/build/compare/0.1.4...0.1.5) (2017-11-13)
 
