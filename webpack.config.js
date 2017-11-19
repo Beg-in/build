@@ -68,7 +68,6 @@ module.exports = ({
   let pug = {
     loader: 'pug-html-loader',
     options: {
-      pretty: true,
       data: { props },
       plugins: {
         resolve(filename, source) {
@@ -98,7 +97,7 @@ module.exports = ({
           loader: 'babel-loader',
           options,
         },
-        pug: ['html-loader', pug],
+        pug: ['vue-html-loader', pug],
         python,
         sass: [{
           loader: 'css-loader',
@@ -139,7 +138,7 @@ module.exports = ({
         /* eslint-disable security/detect-unsafe-regex */
         test: /(?<!vue)\.pug$/,
         /* eslint-enable */
-        loaders: ['html-loader', pug],
+        loaders: ['vue-html-loader', pug],
       }, {
         test: /\.js$/,
         exclude: /node_modules\/(?!begin-)/,

@@ -1,3 +1,13 @@
+<a name="0.2.1"></a>
+## [0.2.1](https://github.com/Beg-in/build/compare/0.2.0...0.2.1) (2017-11-19)
+
+
+### Bug Fixes
+
+* **vue:** swap html-loader with vue-html-loader ([74f573f](https://github.com/Beg-in/build/commit/74f573f))
+
+
+
 <a name="0.2.0"></a>
 # [0.2.0](https://github.com/Beg-in/build/compare/0.1.5...0.2.0) (2017-11-19)
 
@@ -9,7 +19,7 @@
 
 ### Reverts
 
-* **scripts:** remove docs ([eacc8b1](https://github.com/Beg-in/build/commit/eacc8b1))
+* **scripts:** remove docs ([9cab2c2](https://github.com/Beg-in/build/commit/9cab2c2))
 
 
 
