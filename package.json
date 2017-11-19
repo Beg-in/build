@@ -1,7 +1,7 @@
 {
   "name": "begin-build",
   "main": "index.js",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "engines": {
     "node": ">=8.9"
   },
@@ -69,6 +69,7 @@
     "file-loader": "^1.1.5",
     "foreman": "2.0.0",
     "frow": "2.0.1",
+    "html-loader": "0.5.1",
     "html-webpack-plugin": "2.30.1",
     "image-webpack-loader": "3.4.2",
     "imagemin": "5.3.1",
@@ -91,7 +92,6 @@
     "style-loader": "0.18.2",
     "url-loader": "^0.6.2",
     "vue": "^2.5.3",
-    "vue-html-loader": "1.2.4",
     "vue-loader": "^13.4.0",
     "vue-router": "3.0.1",
     "vue-svg-loader": "0.3.0",

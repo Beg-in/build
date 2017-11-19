@@ -97,7 +97,7 @@ module.exports = ({
           loader: 'babel-loader',
           options,
         },
-        pug: ['vue-html-loader', pug],
+        pug,
         python,
         sass: [{
           loader: 'css-loader',
@@ -138,7 +138,7 @@ module.exports = ({
         /* eslint-disable security/detect-unsafe-regex */
         test: /(?<!vue)\.pug$/,
         /* eslint-enable */
-        loaders: ['vue-html-loader', pug],
+        loaders: ['html-loader', pug],
       }, {
         test: /\.js$/,
         exclude: /node_modules\/(?!begin-)/,

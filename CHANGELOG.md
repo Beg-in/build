@@ -1,10 +1,20 @@
+<a name="0.2.2"></a>
+## [0.2.2](https://github.com/Beg-in/build/compare/0.2.1...0.2.2) (2017-11-19)
+
+
+### Reverts
+
+* **webpack:** back to html-loader ([2e68b04](https://github.com/Beg-in/build/commit/2e68b04))
+
+
+
 <a name="0.2.1"></a>
 ## [0.2.1](https://github.com/Beg-in/build/compare/0.2.0...0.2.1) (2017-11-19)
 
 
 ### Bug Fixes
 
-* **vue:** swap html-loader with vue-html-loader ([74f573f](https://github.com/Beg-in/build/commit/74f573f))
+* **vue:** swap html-loader with vue-html-loader ([9939d6f](https://github.com/Beg-in/build/commit/9939d6f))
 
 
 
