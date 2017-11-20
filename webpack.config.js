@@ -161,7 +161,8 @@ module.exports = ({
               { removeXMLNS: true },
             ],
           },
-        }, {
+        },
+      }, {
         test: /\.(jpe?g|png|gif)$/,
         use: ['file-loader', 'image-webpack-loader?bypassOnDebug'],
       }, {
