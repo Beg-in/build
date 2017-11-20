@@ -136,9 +136,8 @@ module.exports = ({
     },
     module: {
       rules: [{
-        /* eslint-disable security/detect-unsafe-regex */
-        test: /(?<!vue)\.pug$/,
-        /* eslint-enable */
+        test: /\.pug$/,
+        exclude: /vue\.pug$/,
         loaders: ['html-loader', pug],
       }, {
         test: /\.js$/,
@@ -155,8 +154,6 @@ module.exports = ({
           svgo: {
             plugins: [
               { removeComments: true },
-              { removeViewBox: false },
-              { removeUnknownsAndDefaults: false },
               { removeDimensions: true },
               { removeXMLNS: true },
             ],

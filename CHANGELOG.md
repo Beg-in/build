@@ -1,3 +1,13 @@
+<a name="0.3.4"></a>
+## [0.3.4](https://github.com/Beg-in/build/compare/0.3.3...0.3.4) (2017-11-20)
+
+
+### Bug Fixes
+
+* **webpack:** invalid regex ([31c4c6c](https://github.com/Beg-in/build/commit/31c4c6c))
+
+
+
 <a name="0.3.3"></a>
 ## [0.3.3](https://github.com/Beg-in/build/compare/0.3.2...0.3.3) (2017-11-20)
 

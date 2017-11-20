@@ -1,7 +1,7 @@
 {
   "name": "begin-build",
   "main": "index.js",
-  "version": "0.3.3",
+  "version": "0.3.4",
   "engines": {
     "node": ">=8.9"
   },
@@ -34,9 +34,10 @@
     "start:services": "run-p postgres redis start:server",
     "start:all": "run-p postgres redis watch:client watch:server",
     "start": "node begin.js; cd $CONTEXT; nf run npm run b start:all",
-    "begin": "run-p test watch:nsp",
-    "nsp": "cd $CONTEXT; nsp check; exit 0",
-    "watch:nsp": "nodemon --exec 'npm run nsp' --watch $CONTEXT/yarn.lock",
+    "begin": "run-p test watch:security",
+    "security": "cd $CONTEXT; nsp check; exit 0",
+    "watch:security": "nodemon --exec 'npm run security' --watch $CONTEXT/yarn.lock",
+    "tunnel": "ngrok http --host-header=rewrite ${PORT:=8080}",
     "// ========== DEPLOYMENT ==========": "",
     "build": "(rm -rf $CONTEXT/www || true); webpack --config webpack.config.js --env.context=$CONTEXT --display-error-details",
     "build:dev": "npm run build -- --env.stage=dev",
@@ -69,6 +70,7 @@
     "file-loader": "^1.1.5",
     "foreman": "2.0.0",
     "frow": "2.1.0",
+    "html-critical-webpack-plugin": "1.0.1",
     "html-loader": "0.5.1",
     "html-webpack-plugin": "2.30.1",
     "image-webpack-loader": "3.4.2",
@@ -78,6 +80,7 @@
     "javascripthon-loader": "0.1.1",
     "jsdoc-babel": "0.3.0",
     "json-loader": "0.5.7",
+    "ngrok": "2.2.23",
     "node-sass": "4.7.1",
     "nodemon": "^1.12.1",
     "npm-run-all": "4.1.2",
