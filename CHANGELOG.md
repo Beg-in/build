@@ -1,10 +1,20 @@
+<a name="0.3.1"></a>
+## [0.3.1](https://github.com/Beg-in/build/compare/0.3.0...0.3.1) (2017-11-20)
+
+
+### Bug Fixes
+
+* **vue:** load root component separately ([d80b534](https://github.com/Beg-in/build/commit/d80b534))
+
+
+
 <a name="0.3.0"></a>
 # [0.3.0](https://github.com/Beg-in/build/compare/0.2.2...0.3.0) (2017-11-19)
 
 
 ### Features
 
-* **components:** add external for links ([b85293d](https://github.com/Beg-in/build/commit/b85293d))
+* **components:** add external for links ([c316aa0](https://github.com/Beg-in/build/commit/c316aa0))
 
 
 

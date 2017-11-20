@@ -151,6 +151,15 @@ module.exports = ({
       }, {
         test: /\.svg$/,
         loader: 'vue-svg-loader',
+        options: {
+          plugins: [
+            { removeComments: true },
+            { removeViewBox: false },
+            { removeUnknownsAndDefaults: false },
+            { removeDimensions: true },
+            { removeXMLNS: true },
+          ],
+        },
       }, {
         test: /\.(jpe?g|png|gif)$/,
         use: ['file-loader', 'image-webpack-loader?bypassOnDebug'],
@@ -188,9 +197,10 @@ module.exports = ({
     resolve: {
       modules,
       alias: {
-        vue: 'vue/dist/vue.js',
-        // HACK: VueRouter exports an ES6 module
-        'vue-router': 'vue-router/dist/vue-router.common.js',
+        vue$: 'vue/dist/vue.runtime.common.js',
+        // HACK: VueRouter and Vuex export an ES6 module
+        'vue-router$': 'vue-router/dist/vue-router.common.js',
+        vuex$: 'vuex/dist/vuex.common.js',
       },
     },
   };
