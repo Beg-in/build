@@ -152,15 +152,16 @@ module.exports = ({
         test: /\.svg$/,
         loader: 'vue-svg-loader',
         options: {
-          plugins: [
-            { removeComments: true },
-            { removeViewBox: false },
-            { removeUnknownsAndDefaults: false },
-            { removeDimensions: true },
-            { removeXMLNS: true },
-          ],
-        },
-      }, {
+          svgo: {
+            plugins: [
+              { removeComments: true },
+              { removeViewBox: false },
+              { removeUnknownsAndDefaults: false },
+              { removeDimensions: true },
+              { removeXMLNS: true },
+            ],
+          },
+        }, {
         test: /\.(jpe?g|png|gif)$/,
         use: ['file-loader', 'image-webpack-loader?bypassOnDebug'],
       }, {

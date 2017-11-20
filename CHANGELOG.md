@@ -1,10 +1,15 @@
+<a name="0.3.2"></a>
+## [0.3.2](https://github.com/Beg-in/build/compare/0.3.1...0.3.2) (2017-11-20)
+
+
+
 <a name="0.3.1"></a>
 ## [0.3.1](https://github.com/Beg-in/build/compare/0.3.0...0.3.1) (2017-11-20)
 
 
 ### Bug Fixes
 
-* **vue:** load root component separately ([d80b534](https://github.com/Beg-in/build/commit/d80b534))
+* **vue:** load root component separately ([8f9701f](https://github.com/Beg-in/build/commit/8f9701f))
 
 
 
