@@ -1,10 +1,15 @@
+<a name="0.5.1"></a>
+## [0.5.1](https://github.com/Beg-in/build/compare/0.5.0...0.5.1) (2018-01-20)
+
+
+
 <a name="0.5.0"></a>
 # [0.5.0](https://github.com/Beg-in/build/compare/0.3.4...0.5.0) (2018-01-20)
 
 
 ### Features
 
-* **store:** add store ([300c5a5](https://github.com/Beg-in/build/commit/300c5a5))
+* **store:** add store ([881ac52](https://github.com/Beg-in/build/commit/881ac52))
 
 
 
