@@ -1,10 +1,20 @@
+<a name="0.5.0"></a>
+# [0.5.0](https://github.com/Beg-in/build/compare/0.3.4...0.5.0) (2018-01-20)
+
+
+### Features
+
+* **store:** add store ([300c5a5](https://github.com/Beg-in/build/commit/300c5a5))
+
+
+
 <a name="0.3.4"></a>
 ## [0.3.4](https://github.com/Beg-in/build/compare/0.3.3...0.3.4) (2017-11-20)
 
 
 ### Bug Fixes
 
-* **webpack:** invalid regex ([31c4c6c](https://github.com/Beg-in/build/commit/31c4c6c))
+* **webpack:** invalid regex ([b85a7d7](https://github.com/Beg-in/build/commit/b85a7d7))
 
 
 

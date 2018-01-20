@@ -1,5 +1,6 @@
 'use strict';
 
+let fs = require('fs');
 let HtmlWebpackPlugin = require('html-webpack-plugin');
 let assignDeep = require('begin-util/assign-deep');
 let path = require('path');
@@ -9,37 +10,28 @@ let OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 
 const MAIN = './index.js';
 
-module.exports = ({
-  context = process.cwd(),
-  stage = 'production',
-  port,
-  isCordova = false,
-} = {}) => {
+/* eslint-disable global-require, import/no-dynamic-require, security/detect-non-literal-require */
+module.exports = (opts = {}) => {
+  let {
+    context = process.cwd(),
+    stage = 'production',
+    port,
+    isCordova = false,
+  } = opts;
+
+  let toContext = (...args) => path.join(context, ...args);
   let isLocal = stage === 'local';
-  let base = require.resolve(MAIN, { paths: [
-    path.join(context, 'src/client'),
-    path.join(context, 'src/'),
-    context,
-  ] });
-  base = base.substring(0, base.lastIndexOf('/'));
+
   let props;
-
-  /*
-     eslint-disable
-     global-require,
-     import/no-dynamic-require,
-     security/detect-non-literal-require,
-     security/detect-object-injection
-  */
   try {
-    props = require(`${context}/properties`);
+    props = require(path.join(context, 'properties'));
   } catch (e) {
-    props = { domain: require(`${context}/package`).domain };
+    props = { domain: require(path.join(context, 'package')).domain };
   }
-  props = assignDeep(props.base || {}, props[stage] || {}).client || {};
-  /* eslint-enable */
-
   const DOMAIN = props.domain;
+  /* eslint-disable security/detect-object-injection */
+  props = assignDeep(props.base || {}, props[stage] || {}).client || {};
+  /* eslint-enable security/detect-object-injection */
   const devRoot = `http://${process.env.API_URL || 'localhost'}`;
   props = Object.assign({
     isCordova,
@@ -52,11 +44,28 @@ module.exports = ({
     root: `${devRoot}:${~~port}/`,
   });
   props.stage = stage;
+  props.env = props.env || props.stage;
+
+  let entry;
+  if (props.entry) {
+    entry = toContext(props.entry);
+  } else {
+    entry = require.resolve(MAIN, { paths: [
+      toContext('src/client'),
+      toContext('client'),
+      toContext('src'),
+      context,
+    ] });
+  }
+  let dist = props.dist || 'dist';
+  let filename = props.filename || '[hash].min.js';
+  delete props.entry;
+  delete props.dist;
+  delete props.filename;
 
   let modules = [
-    path.join(context, 'node_modules'),
+    toContext('node_modules'),
     path.join(__dirname, 'node_modules'),
-    'node_modules',
   ];
 
   let targets = { browsers: ['last 2 versions'] };
@@ -70,13 +79,13 @@ module.exports = ({
     options: {
       data: { props },
       plugins: {
-        resolve(filename, source) {
-          let opts = { paths: [path.dirname(source)] };
-          if (filename.indexOf('~') === 0) {
-            filename = filename.substring(1);
-            opts.paths = modules;
+        resolve(file, source) {
+          let settings = { paths: [path.dirname(source)] };
+          if (file.indexOf('~') === 0) {
+            file = file.substring(1);
+            settings.paths = modules;
           }
-          return require.resolve(filename, opts);
+          return require.resolve(file, settings);
         },
       },
     },
@@ -120,7 +129,7 @@ module.exports = ({
           loader: 'sass-loader',
           options: {
             sourceMap: true,
-            includePaths: modules,
+            includePaths: modules.reverse(),
           },
         }],
       },
@@ -128,17 +137,17 @@ module.exports = ({
   };
 
   let config = {
-    entry: path.join(base, MAIN),
+    entry,
     output: {
-      path: path.join(context, 'www'),
+      path: toContext(dist),
       publicPath: props.cdn,
-      filename: '[hash].min.js',
+      filename,
     },
     module: {
       rules: [{
         test: /\.pug$/,
         exclude: /vue\.pug$/,
-        loaders: ['html-loader', pug],
+        use: ['html-loader', pug],
       }, {
         test: /\.js$/,
         exclude: /node_modules\/(?!begin-)/,
@@ -146,7 +155,7 @@ module.exports = ({
         options,
       }, {
         test: /\.py$/,
-        loaders: python,
+        use: python,
       }, {
         test: /\.svg$/,
         loader: 'vue-svg-loader',
@@ -173,36 +182,44 @@ module.exports = ({
         loader: vueLoader,
       }, {
         test: /vue\.pug$/,
-        loaders: [vueLoader, pug],
+        use: [vueLoader, pug],
       }],
     },
     plugins: [
       new webpack.DefinePlugin({
         'process.env': {
-          NODE_ENV: `"${stage}"`,
+          NODE_ENV: `"${props.env}"`,
           PROPS: `${JSON.stringify(props)}`,
         },
       }),
       new webpack.optimize.OccurrenceOrderPlugin(),
-      new HtmlWebpackPlugin({
-        template: path.join(base, './index.pug'),
-        favicon: path.join(base, './favicon.png'),
-        inject: 'body',
-        filename: 'index.html',
-        props,
-      }),
       new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
     ],
     resolve: {
       modules,
       alias: {
+        '^@': context,
+        // HACK: Vue packages export ES6 modules
         vue$: 'vue/dist/vue.runtime.common.js',
-        // HACK: VueRouter and Vuex export an ES6 module
         'vue-router$': 'vue-router/dist/vue-router.common.js',
         vuex$: 'vuex/dist/vuex.common.js',
       },
     },
   };
+
+  let base = entry.substring(0, entry.lastIndexOf('/'));
+  let template = path.join(base, './index.pug');
+  /* eslint-disable security/detect-non-literal-fs-filename */
+  if (fs.existsSync(template)) {
+    /* eslint-enable security/detect-non-literal-fs-filename */
+    config.plugins.push(new HtmlWebpackPlugin({
+      template,
+      favicon: path.join(base, './favicon.png'),
+      inject: 'body',
+      filename: 'index.html',
+      props,
+    }));
+  }
 
   let fallback = {
     loader: 'style-loader',
@@ -226,22 +243,30 @@ module.exports = ({
       use: vueLoader.options.loaders.sass,
       fallback,
     });
-    config.plugins.push(new OptimizeCssAssetsPlugin({
-      cssProcessorOptions: {
-        discardComments: {
-          removeAll: true,
+    config.plugins = config.plugins.concat([
+      new OptimizeCssAssetsPlugin({
+        cssProcessorOptions: {
+          discardComments: {
+            removeAll: true,
+          },
         },
-      },
-    }));
-    config.plugins.push(new webpack.optimize.UglifyJsPlugin({
-      compress: {
-        warnings: false,
-      },
-      output: {
-        comments: false,
-      },
-      // sourceMap: true,
-    }));
+      }),
+      new webpack.optimize.UglifyJsPlugin({
+        compress: {
+          warnings: false,
+        },
+        output: {
+          comments: false,
+        },
+      }),
+    ]);
+  }
+
+  try {
+    let contextConfig = require(toContext('webpack.config'));
+    config = contextConfig(Object.assign(opts, { context, port, config, toContext, props }));
+  } catch (e) {
+    console.warn('No webpack config found in project');
   }
 
   return config;
