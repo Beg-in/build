@@ -1,3 +1,13 @@
+<a name="0.7.0"></a>
+# [0.7.0](https://github.com/Beg-in/build/compare/0.5.1...0.7.0) (2018-01-24)
+
+
+### Features
+
+* **store:** added hot reload mechanism ([832c16a](https://github.com/Beg-in/build/commit/832c16a))
+
+
+
 <a name="0.5.1"></a>
 ## [0.5.1](https://github.com/Beg-in/build/compare/0.5.0...0.5.1) (2018-01-20)
 
