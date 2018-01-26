@@ -1,0 +1,9 @@
+{
+  "domain": "example.com",
+  "base": {
+    "client": {
+      "title": "Fresh template | begin-build",
+      "color": "#12D8B7"
+    }
+  }
+}
