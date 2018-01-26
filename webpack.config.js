@@ -91,13 +91,6 @@ module.exports = (opts = {}) => {
     },
   };
 
-  let python = [{
-    loader: 'babel-loader',
-    options,
-  }, {
-    loader: 'javascripthon-loader',
-  }];
-
   let vueLoader = {
     loader: 'vue-loader',
     options: {
@@ -108,7 +101,6 @@ module.exports = (opts = {}) => {
           options,
         },
         pug,
-        python,
         sass: [{
           loader: 'css-loader',
           options: {
@@ -153,9 +145,6 @@ module.exports = (opts = {}) => {
         exclude: /node_modules\/(?!begin-)/,
         loader: 'babel-loader',
         options,
-      }, {
-        test: /\.py$/,
-        use: python,
       }, {
         test: /\.svg$/,
         loader: 'vue-svg-loader',

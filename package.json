@@ -1,7 +1,7 @@
 {
   "name": "begin-build",
   "main": "index.js",
-  "version": "0.7.0",
+  "version": "0.8.0",
   "engines": {
     "node": ">=8.9"
   },
@@ -76,7 +76,6 @@
     "imagemin": "5.3.1",
     "imagemin-optipng": "5.2.1",
     "imagemin-pngquant": "5.0.1",
-    "javascripthon-loader": "0.1.1",
     "jsdoc-babel": "0.3.0",
     "json-loader": "0.5.7",
     "ngrok": "2.2.25",
