@@ -1,0 +1,34 @@
+{
+  "name": "Example",
+  "main": "index.js",
+  "version": "0.1.0",
+  "engines": {
+    "node": ">=8.9"
+  },
+  "description": "Example description",
+  "homepage": "http://example.com",
+  "repository": "Example/homepage",
+  "bugs": {
+    "url": "https://github.com/Example/homepage/issues"
+  },
+  "author": {
+    "name": "Me",
+    "email": "me@example.com",
+    "url": "http://example.com"
+  },
+  "contributors": [
+    "John Doe <john@example.com> (example.com)"
+  ],
+  "license": "UNLICENSED",
+  "private": true,
+  "scripts": {
+    "b": "CONTEXT=$(pwd) npm explore begin-build -- npm run",
+    "start": "npm run b start:client"
+  },
+  "devDependencies": {
+    "begin-util": "^1.0.0",
+    "begin-build": "^0.8.0"
+  },
+  "// HACK: postcss-loader must have config": "",
+  "postcss": {}
+}

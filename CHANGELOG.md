@@ -1,3 +1,13 @@
+<a name="0.8.1"></a>
+## [0.8.1](https://github.com/Beg-in/build/compare/0.8.0...0.8.1) (2018-01-27)
+
+
+### Bug Fixes
+
+* **webpack:** remove `./` from resolved file name ([5133022](https://github.com/Beg-in/build/commit/5133022))
+
+
+
 <a name="0.8.0"></a>
 # [0.8.0](https://github.com/Beg-in/build/compare/0.7.0...0.8.0) (2018-01-26)
 

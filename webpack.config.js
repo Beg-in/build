@@ -8,7 +8,7 @@ let webpack = require('webpack');
 let ExtractTextPlugin = require('extract-text-webpack-plugin');
 let OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 
-const MAIN = './index.js';
+const MAIN = 'index.js';
 
 /* eslint-disable global-require, import/no-dynamic-require, security/detect-non-literal-require */
 module.exports = (opts = {}) => {
