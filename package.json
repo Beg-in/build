@@ -1,7 +1,7 @@
 {
   "name": "begin-build",
   "main": "index.js",
-  "version": "0.8.1",
+  "version": "0.8.2",
   "engines": {
     "node": ">=8.9"
   },
@@ -28,7 +28,7 @@
     "redis": "redis-server",
     "client": "webpack-dev-server -d --host ${IP:=0.0.0.0} --config webpack.config.js --env.stage=local --env.port=${PORT:=8080} --env.context=$CONTEXT --progress $(if [ $C9_HOSTNAME ]; then echo \"--public $C9_HOSTNAME --env.url=https://$C9_HOSTNAME\"; fi)",
     "watch:client": "nodemon --watch $CONTEXT/yarn.lock --watch webpack.config.js --exec 'npm run client'",
-    "watch:server": "STAGE=local PORT=$((${PORT:-8080}+1)) nodemon --exec 'node --inspect $CONTEXT/index.js' --watch $CONTEXT/properties.json --watch $CONTEXT/yarn.lock --watch $(if [ -d \"$CONTEXT/src/server\" ]; then echo \"$CONTEXT/src/server\"; else echo \"$CONTEXT/src\"; fi)",
+    "watch:server": "cd $CONTEXT; STAGE=local PORT=$((${PORT:-8080}+1)) nodemon --exec 'node --inspect index.js' --watch properties.json --watch yarn.lock --watch $(if [ -d \"src/server\" ]; then echo \"src/server\"; else echo \"src\"; fi)",
     "start:client": "node begin.js; cd $CONTEXT; nf run npm run b watch:client",
     "start:server": "node begin.js; cd $CONTEXT; nf run npm run b watch:server",
     "start:services": "run-p postgres redis start:server",

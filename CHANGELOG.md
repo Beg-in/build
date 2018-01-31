@@ -1,10 +1,20 @@
+<a name="0.8.2"></a>
+## [0.8.2](https://github.com/Beg-in/build/compare/0.8.1...0.8.2) (2018-01-31)
+
+
+### Bug Fixes
+
+* **scripts:** fix server context ([d2fe1b0](https://github.com/Beg-in/build/commit/d2fe1b0))
+
+
+
 <a name="0.8.1"></a>
 ## [0.8.1](https://github.com/Beg-in/build/compare/0.8.0...0.8.1) (2018-01-27)
 
 
 ### Bug Fixes
 
-* **webpack:** remove `./` from resolved file name ([5133022](https://github.com/Beg-in/build/commit/5133022))
+* **webpack:** remove `./` from resolved file name ([30f87c5](https://github.com/Beg-in/build/commit/30f87c5))
 
 
 
