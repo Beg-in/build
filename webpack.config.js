@@ -17,6 +17,7 @@ module.exports = (opts = {}) => {
     stage = 'production',
     port,
     isCordova = false,
+    url,
   } = opts;
 
   let toContext = (...args) => path.join(context, ...args);
@@ -32,7 +33,7 @@ module.exports = (opts = {}) => {
   /* eslint-disable security/detect-object-injection */
   props = assignDeep(props.base || {}, props[stage] || {}).client || {};
   /* eslint-enable security/detect-object-injection */
-  const devRoot = `http://${process.env.API_URL || 'localhost'}`;
+  const devRoot = url || 'http://localhost';
   props = Object.assign({
     isCordova,
     cdn: `https://cdn.${DOMAIN}/`,
@@ -193,6 +194,9 @@ module.exports = (opts = {}) => {
         'vue-router$': 'vue-router/dist/vue-router.common.js',
         vuex$: 'vuex/dist/vuex.common.js',
       },
+    },
+    resolveLoader: {
+      modules: ['node_modules', toContext('node_modules')],
     },
   };
 

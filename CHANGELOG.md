@@ -1,9 +1,20 @@
+<a name="0.9.0"></a>
+# [0.9.0](https://github.com/Beg-in/build/compare/0.8.2...0.9.0) (2018-02-16)
+
+
+### Bug Fixes
+
+* **webpack:** c9 context and resolveloader ([ab63b26](https://github.com/Beg-in/build/commit/ab63b26))
+
+
+
 <a name="0.8.2"></a>
 ## [0.8.2](https://github.com/Beg-in/build/compare/0.8.1...0.8.2) (2018-01-31)
 
 
 ### Bug Fixes
 
+* **scripts:** fix server context ([b1e9150](https://github.com/Beg-in/build/commit/b1e9150))
 * **scripts:** fix server context ([d2fe1b0](https://github.com/Beg-in/build/commit/d2fe1b0))
 
 
