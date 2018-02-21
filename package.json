@@ -63,7 +63,7 @@
     "babel-loader": "7.1.2",
     "babel-polyfill": "6.26.0",
     "babel-preset-env": "^1.6.1",
-    "begin-project": "0.2.1",
+    "begin-project": "0.3.0",
     "begin-util": "1.2.0",
     "css-loader": "0.28.9",
     "extract-text-webpack-plugin": "^3.0.2",
