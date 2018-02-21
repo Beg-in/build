@@ -1,10 +1,20 @@
+<a name="0.11.0"></a>
+# [0.11.0](https://github.com/Beg-in/build/compare/0.9.0...0.11.0) (2018-02-21)
+
+
+### Features
+
+* **store:** add persist ([28f76c0](https://github.com/Beg-in/build/commit/28f76c0))
+
+
+
 <a name="0.9.0"></a>
 # [0.9.0](https://github.com/Beg-in/build/compare/0.8.2...0.9.0) (2018-02-16)
 
 
 ### Bug Fixes
 
-* **webpack:** c9 context and resolveloader ([ab63b26](https://github.com/Beg-in/build/commit/ab63b26))
+* **webpack:** c9 context and resolveloader ([3a1f0ad](https://github.com/Beg-in/build/commit/3a1f0ad))
 
 
 
