@@ -35,7 +35,6 @@ module.exports = store(module.id, {
   actions: {
     // init is a special action that will be automatically executed when this store is initialized
     async init({ commit, getters }) {
-
       // run some async function like a request using axios
       let { data } = await api.get('example/endpoint');
 
@@ -49,7 +48,7 @@ module.exports = store(module.id, {
           commit('setExample', true);
 
         // view the store with getters
-        } else if(getters.example) {
+        } else if (getters.example) {
           commit('toggleExample');
         }
         next();

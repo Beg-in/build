@@ -1,6 +1,7 @@
 /* eslint-disable security/detect-object-injection */
 let Vue = require('vue');
 let Vuex = require('vuex');
+let mapObject = require('begin-util/map-object');
 let localstorage = require('../localstorage');
 
 const state = {};
@@ -42,11 +43,10 @@ let modules = {};
 let register = (id, obj) => {
   store.registerModule(modules[id], obj);
 };
-let toContext = helpers => Object.entries(helpers).reduce((out, [name, helper]) => {
-  out[name] = (...args) => Object.assign({ $store: store }, helper(...args));
-  return out;
-}, {});
-let { mapActions } = toContext(Vuex.createNamespacedHelpers(PERSIST));
+let scope = { $store: store };
+let toBound = helpers => mapObject(helpers, helper =>
+  (...args) => mapObject(helper(...args), mapFn => mapFn.bind(scope)));
+let { mapActions } = toBound(Vuex.createNamespacedHelpers(PERSIST));
 let $persist = mapActions(['restore', 'set', 'clear']);
 let persisting = [];
 
@@ -55,14 +55,14 @@ module.exports = Object.assign((id, obj) => {
   register(id, obj);
   let path = modules[id];
   let helpers = Vuex.createNamespacedHelpers(path);
-  helpers.context = toContext(helpers);
+  helpers.bound = toBound(helpers);
   if (obj.persist) {
     persisting.push(path);
     $persist.restore(path);
   }
   if (obj.actions && obj.actions.init) {
-    let context = helpers.context.mapActions(['init']);
-    context.init();
+    let bound = helpers.bound.mapActions(['init']);
+    bound.init();
   }
   return helpers;
 }, {

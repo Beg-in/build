@@ -2,20 +2,20 @@
 
 require('babel-polyfill');
 let Vue = require('vue');
-let component = require('./vue.pug');
-let external = require('./external/vue.pug');
+// let component = require('./vue.pug');
+let external = require('./external');
 
 // Vue.config.devtools = false
 // Vue.config.debug = false
 // Vue.config.silent = true
 
-module.exports = app => {
+module.exports = component => {
   Vue.component('external', external);
-  if (app.router) {
-    let router = require('./router');
-    app.router = router.create(app.router);
-  }
-  app.vm = new Vue(Object.assign(component, app));
-  app.vm.$mount('#app');
-  return app;
+  component.vm = new Vue(Object.assign({
+    render(createElement) {
+      return createElement('app');
+    },
+  }, component));
+  component.vm.$mount('#app');
+  return component;
 };

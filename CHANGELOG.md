@@ -1,3 +1,13 @@
+<a name="0.12.0"></a>
+# [0.12.0](https://github.com/Beg-in/build/compare/0.11.0...0.12.0) (2018-02-24)
+
+
+### Bug Fixes
+
+* **router:** router now initializes after component ([feee88b](https://github.com/Beg-in/build/commit/feee88b))
+
+
+
 <a name="0.11.0"></a>
 # [0.11.0](https://github.com/Beg-in/build/compare/0.9.0...0.11.0) (2018-02-21)
 
