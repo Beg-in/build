@@ -1,5 +1,6 @@
 'use strict';
 
+/* eslint-disable global-require, import/no-dynamic-require, security/detect-non-literal-require, security/detect-non-literal-fs-filename */
 let fs = require('fs');
 let HtmlWebpackPlugin = require('html-webpack-plugin');
 let assignDeep = require('begin-util/assign-deep');
@@ -10,7 +11,6 @@ let OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 
 const MAIN = 'index.js';
 
-/* eslint-disable global-require, import/no-dynamic-require, security/detect-non-literal-require */
 module.exports = (opts = {}) => {
   let {
     context = process.cwd(),
@@ -30,9 +30,7 @@ module.exports = (opts = {}) => {
     props = { domain: require(path.join(context, 'package')).domain };
   }
   const DOMAIN = props.domain;
-  /* eslint-disable security/detect-object-injection */
   props = assignDeep(props.base || {}, props[stage] || {}).client || {};
-  /* eslint-enable security/detect-object-injection */
   const devRoot = url || 'http://localhost';
   props = Object.assign({
     isCordova,
@@ -202,9 +200,7 @@ module.exports = (opts = {}) => {
 
   let base = entry.substring(0, entry.lastIndexOf('/'));
   let template = path.join(base, './index.pug');
-  /* eslint-disable security/detect-non-literal-fs-filename */
   if (fs.existsSync(template)) {
-    /* eslint-enable security/detect-non-literal-fs-filename */
     config.plugins.push(new HtmlWebpackPlugin({
       template,
       favicon: path.join(base, './favicon.png'),

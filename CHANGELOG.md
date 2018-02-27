@@ -1,10 +1,20 @@
+<a name="0.13.0"></a>
+# [0.13.0](https://github.com/Beg-in/build/compare/0.12.0...0.13.0) (2018-02-27)
+
+
+### Features
+
+* **alerts:** add alerts store ([75a566a](https://github.com/Beg-in/build/commit/75a566a))
+
+
+
 <a name="0.12.0"></a>
 # [0.12.0](https://github.com/Beg-in/build/compare/0.11.0...0.12.0) (2018-02-24)
 
 
 ### Bug Fixes
 
-* **router:** router now initializes after component ([feee88b](https://github.com/Beg-in/build/commit/feee88b))
+* **router:** router now initializes after component ([1c9e717](https://github.com/Beg-in/build/commit/1c9e717))
 
 
 

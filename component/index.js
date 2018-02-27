@@ -1,5 +1,3 @@
-/* eslint-disable security/detect-object-injection */
-
 let { isFunction } = require('begin-util');
 
 let toThis = F => function (...args) {

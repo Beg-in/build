@@ -1,5 +1,3 @@
-/* eslint-disable security/detect-object-injection */
-
 const TEST = '_TEST_LOCALSTORAGE_AVAILABLE_';
 let storage = window.localStorage;
 

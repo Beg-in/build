@@ -1,4 +1,3 @@
-/* eslint-disable security/detect-object-injection */
 let Vue = require('vue');
 let Vuex = require('vuex');
 let mapObject = require('begin-util/map-object');
@@ -43,10 +42,14 @@ let modules = {};
 let register = (id, obj) => {
   store.registerModule(modules[id], obj);
 };
-let scope = { $store: store };
-let toBound = helpers => mapObject(helpers, helper =>
-  (...args) => mapObject(helper(...args), mapFn => mapFn.bind(scope)));
-let { mapActions } = toBound(Vuex.createNamespacedHelpers(PERSIST));
+let getHelpers = namespace => {
+  let helpers = Vuex.createNamespacedHelpers(namespace);
+  helpers.bound = Object.assign({}, helpers);
+  helpers.bound = mapObject(helpers, helper =>
+    (...args) => mapObject(helper(...args), fn => fn.bind({ $store: store })));
+  return helpers;
+};
+let { bound: { mapActions } } = getHelpers(PERSIST);
 let $persist = mapActions(['restore', 'set', 'clear']);
 let persisting = [];
 
@@ -54,8 +57,7 @@ module.exports = Object.assign((id, obj) => {
   obj.namespaced = true;
   register(id, obj);
   let path = modules[id];
-  let helpers = Vuex.createNamespacedHelpers(path);
-  helpers.bound = toBound(helpers);
+  let helpers = getHelpers(path);
   if (obj.persist) {
     persisting.push(path);
     $persist.restore(path);
@@ -69,6 +71,7 @@ module.exports = Object.assign((id, obj) => {
   store,
   PERSIST,
   $persist,
+  getHelpers,
 
   context(appModule, context) {
     if (module.hot) {
