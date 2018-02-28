@@ -6,6 +6,7 @@ let config = {
   mode: 'history', // TODO: merge with mode when mobile is added
 };
 
+let first = true;
 let ready;
 let deferred = new Promise(resolve => {
   ready = resolve;
@@ -15,10 +16,20 @@ module.exports = {
   create(...args) {
     Object.assign(config, ...args);
     let router = new VueRouter(config);
-    router.beforeEach(async (to, from, next) => {
-      await deferred;
-      next();
+    let initial;
+    router.beforeEach((to, from, next) => {
+      if (first) {
+        first = false;
+        initial = to;
+        next(false);
+      } else {
+        next();
+      }
     });
+    (async () => {
+      await deferred;
+      router.replace(initial);
+    })();
     Object.assign(module.exports, router);
     Object.setPrototypeOf(module.exports, Object.getPrototypeOf(router));
     return module.exports;
