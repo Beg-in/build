@@ -2,14 +2,18 @@
 
 /* eslint-disable global-require, import/no-dynamic-require, security/detect-non-literal-require, security/detect-non-literal-fs-filename */
 let fs = require('fs');
-let HtmlWebpackPlugin = require('html-webpack-plugin');
-let assignDeep = require('begin-util/assign-deep');
 let path = require('path');
 let webpack = require('webpack');
-let ExtractTextPlugin = require('extract-text-webpack-plugin');
+let autoprefixer = require('autoprefixer');
+let cssnano = require('cssnano');
+let { VueLoaderPlugin } = require('vue-loader');
+let HtmlWebpackPlugin = require('html-webpack-plugin');
 let OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
+let MiniCssExtractPlugin = require('mini-css-extract-plugin');
+let assignDeep = require('begin-util/assign-deep');
 
 const MAIN = 'index.js';
+const BROWSERS = 'last 2 versions';
 
 module.exports = (opts = {}) => {
   let {
@@ -67,17 +71,11 @@ module.exports = (opts = {}) => {
     path.join(__dirname, 'node_modules'),
   ];
 
-  let targets = { browsers: ['last 2 versions'] };
-
-  let options = {
-    presets: [['env', { targets, useBuiltIns: true }]],
-  };
-
   let pug = {
-    loader: 'pug-html-loader',
+    loader: 'pug-plain-loader',
     options: {
       data: { props },
-      plugins: {
+      plugins: [{
         resolve(file, source) {
           let settings = { paths: [path.dirname(source)] };
           if (file.indexOf('~') === 0) {
@@ -86,46 +84,35 @@ module.exports = (opts = {}) => {
           }
           return require.resolve(file, settings);
         },
-      },
+      }],
     },
   };
 
-  let vueLoader = {
-    loader: 'vue-loader',
+  let sass = [{
+    loader: 'css-loader',
     options: {
-      esModule: false,
-      loaders: {
-        js: {
-          loader: 'babel-loader',
-          options,
-        },
-        pug,
-        sass: [{
-          loader: 'css-loader',
-          options: {
-            sourceMap: true,
-            importLoaders: 2,
-          },
-        }, {
-          loader: 'postcss-loader',
-          options: {
-            sourceMap: true,
-            config: {
-              ctx: {
-                autoprefixer: targets,
-              },
-            },
-          },
-        }, {
-          loader: 'sass-loader',
-          options: {
-            sourceMap: true,
-            includePaths: modules.reverse(),
-          },
-        }],
+      sourceMap: true,
+      importLoaders: 2,
+    },
+  }, {
+    loader: 'postcss-loader',
+    options: {
+      sourceMap: true,
+      ident: 'postcss',
+      plugins() {
+        return [
+          autoprefixer(BROWSERS),
+          cssnano(),
+        ];
       },
     },
-  };
+  }, {
+    loader: 'sass-loader',
+    options: {
+      sourceMap: true,
+      includePaths: modules.reverse(),
+    },
+  }];
 
   let config = {
     entry,
@@ -136,14 +123,27 @@ module.exports = (opts = {}) => {
     },
     module: {
       rules: [{
+        test: /\.vue$/,
+        loader: 'vue-loader',
+      }, {
+        test: /vue\.pug$/,
+        use: ['vue-loader', pug],
+      }, {
         test: /\.pug$/,
         exclude: /vue\.pug$/,
-        use: ['html-loader', pug],
+        oneOf: [{
+          resourceQuery: /^\?vue/,
+          loader: pug,
+        }, {
+          use: ['html-loader', pug],
+        }],
       }, {
         test: /\.js$/,
-        exclude: /node_modules\/(?!begin-)/,
+        // exclude: /node_modules\/(?!begin-)/,
         loader: 'babel-loader',
-        options,
+        options: {
+          presets: [['env', { targets: { browsers: [BROWSERS] }, useBuiltIns: true }]],
+        },
       }, {
         test: /\.svg$/,
         loader: 'vue-svg-loader',
@@ -163,31 +163,24 @@ module.exports = (opts = {}) => {
         test: /\.ttf$/,
         loader: 'file-loader',
       }, {
-        test: /\.md$/,
-        loader: 'vue-markdown-loader',
-      }, {
-        test: /\.vue$/,
-        loader: vueLoader,
-      }, {
-        test: /vue\.pug$/,
-        use: [vueLoader, pug],
+        test: /\.sass$/,
+        use: sass,
       }],
     },
     plugins: [
+      new VueLoaderPlugin(),
       new webpack.DefinePlugin({
         'process.env': {
           NODE_ENV: `"${props.env}"`,
           PROPS: `${JSON.stringify(props)}`,
         },
       }),
-      new webpack.optimize.OccurrenceOrderPlugin(),
       new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
     ],
     resolve: {
       modules,
       alias: {
         '^@': context,
-        // HACK: Vue packages export ES6 modules
         vue$: 'vue/dist/vue.runtime.common.js',
         'vue-router$': 'vue-router/dist/vue-router.common.js',
         vuex$: 'vuex/dist/vuex.common.js',
@@ -201,38 +194,34 @@ module.exports = (opts = {}) => {
   let base = entry.substring(0, entry.lastIndexOf('/'));
   let template = path.join(base, './index.pug');
   if (fs.existsSync(template)) {
-    config.plugins.push(new HtmlWebpackPlugin({
-      template,
-      favicon: path.join(base, './favicon.png'),
-      inject: 'body',
-      filename: 'index.html',
-      props,
-    }));
+    let options = { template, props };
+    let favicon = path.join(base, './favicon.png');
+    if (fs.existsSync(favicon)) {
+      options.favicon = favicon;
+    }
+    config.plugins.push(new HtmlWebpackPlugin(options));
   }
 
-  let fallback = {
-    loader: 'style-loader',
-  };
-
   if (isLocal) {
-    vueLoader.options.loaders.sass.unshift(fallback);
-    config.plugins.push(new webpack.HotModuleReplacementPlugin());
-    config.plugins.push(new webpack.NoEmitOnErrorsPlugin());
-    config.performance = false;
-    config.devServer = {
-      hot: true,
-      overlay: true,
-      historyApiFallback: true,
-      stats: 'minimal',
-    };
-  } else {
-    config.devtool = 'source-map';
-    config.plugins.push(new ExtractTextPlugin('[hash].min.css'));
-    vueLoader.options.loaders.sass = ExtractTextPlugin.extract({
-      use: vueLoader.options.loaders.sass,
-      fallback,
-    });
+    config.mode = 'development';
+    sass.unshift('vue-style-loader');
     config.plugins = config.plugins.concat([
+      new webpack.HotModuleReplacementPlugin(),
+    ]);
+    Object.assign(config, {
+      performance: false,
+      devServer: {
+        hot: true,
+        overlay: true,
+        historyApiFallback: true,
+        stats: 'minimal',
+      },
+    });
+  } else {
+    config.mode = 'production';
+    sass.unshift(MiniCssExtractPlugin.loader);
+    config.plugins = config.plugins.concat([
+      new MiniCssExtractPlugin({ filename: '[hash].min.css' }),
       new OptimizeCssAssetsPlugin({
         cssProcessorOptions: {
           discardComments: {
@@ -240,20 +229,12 @@ module.exports = (opts = {}) => {
           },
         },
       }),
-      new webpack.optimize.UglifyJsPlugin({
-        compress: {
-          warnings: false,
-        },
-        output: {
-          comments: false,
-        },
-      }),
     ]);
   }
 
   try {
     let contextConfig = require(toContext('webpack.config'));
-    config = contextConfig(Object.assign(opts, { context, port, config, toContext, props }));
+    config = contextConfig(Object.assign(opts, { context, port, config, toContext, props, pug }));
   } catch (e) {
     console.warn('No webpack config found in project');
   }
