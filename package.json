@@ -68,6 +68,7 @@
     "file-loader": "^1.1.6",
     "foreman": "^2.0.0",
     "frow": "^3.0.3",
+    "html-loader": "^0.5.5",
     "html-webpack-plugin": "^3.2.0",
     "image-webpack-loader": "^4.1.0",
     "imagemin": "^5.3.1",

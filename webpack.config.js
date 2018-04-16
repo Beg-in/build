@@ -74,6 +74,7 @@ module.exports = (opts = {}) => {
   let pug = {
     loader: 'pug-plain-loader',
     options: {
+      ident: 'pug-loader',
       data: { props },
       plugins: [{
         resolve(file, source) {
@@ -108,10 +109,11 @@ module.exports = (opts = {}) => {
     },
   }, {
     loader: 'sass-loader',
-    options: {
-      sourceMap: true,
-      includePaths: modules.reverse(),
-    },
+    // FIXME: sass-loader options seem broken
+    // options: {
+    //   sourceMap: true,
+    //   includePaths: modules.reverse(),
+    // },
   }];
 
   let config = {
