@@ -235,7 +235,7 @@ module.exports = (opts = {}) => {
   }
 
   try {
-    let contextConfig = require(toContext('webpack.config'));
+    let contextConfig = require(toContext('build.config'));
     config = contextConfig(Object.assign(opts, { context, port, config, toContext, props, pug }));
   } catch (e) {
     console.warn('No webpack config found in project');
