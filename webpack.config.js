@@ -26,17 +26,19 @@ module.exports = (opts = {}) => {
 
   let toContext = (...args) => path.join(context, ...args);
   let isLocal = stage === 'local';
+  let pkg = require(path.join(context, 'package'));
 
   let props;
   try {
     props = require(path.join(context, 'properties'));
   } catch (e) {
-    props = { domain: require(path.join(context, 'package')).domain };
+    props = { domain: pkg.domain };
   }
   const DOMAIN = props.domain;
   props = assignDeep(props.base || {}, props[stage] || {}).client || {};
   const devRoot = url || 'http://localhost';
   props = Object.assign({
+    version: pkg.version,
     isCordova,
     cdn: `https://cdn.${DOMAIN}/`,
     api: `https://api.${DOMAIN}/v1/`,
@@ -78,12 +80,10 @@ module.exports = (opts = {}) => {
       data: { props },
       plugins: [{
         resolve(file, source) {
-          let settings = { paths: [path.dirname(source)] };
           if (file.indexOf('~') === 0) {
-            file = file.substring(1);
-            settings.paths = modules;
+            return require.resolve(file.substring(1), { paths: modules });
           }
-          return require.resolve(file, settings);
+          return path.join(path.dirname(source), file);
         },
       }],
     },
