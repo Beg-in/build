@@ -141,7 +141,7 @@ module.exports = (opts = {}) => {
         }],
       }, {
         test: /\.js$/,
-        // exclude: /node_modules\/(?!begin-)/,
+        exclude: /node_modules\/(?!begin-)/,
         loader: 'babel-loader',
         options: {
           presets: [['env', { targets: { browsers: [BROWSERS] }, useBuiltIns: true }]],
