@@ -12,7 +12,7 @@ let OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 let MiniCssExtractPlugin = require('mini-css-extract-plugin');
 let assignDeep = require('begin-util/assign-deep');
 
-const MAIN = 'index.js';
+const MAIN = './index.js';
 const BROWSERS = 'last 2 versions';
 
 module.exports = (opts = {}) => {
@@ -55,12 +55,26 @@ module.exports = (opts = {}) => {
   if (props.entry) {
     entry = toContext(props.entry);
   } else {
-    entry = require.resolve(MAIN, { paths: [
-      toContext('src/client'),
-      toContext('client'),
-      toContext('src'),
-      context,
-    ] });
+    // BUG: resolve does't work properly when from another directory, see: https://github.com/nodejs/node/issues/18686
+    let locate = dir => path.join(toContext(dir), MAIN);
+    let entrySrcClient = locate('src/client');
+    let entryClient = locate('src/client');
+    let entrySrc = locate('src/client');
+    if (fs.existsSync(entrySrcClient)) {
+      entry = entrySrcClient;
+    } else if (fs.existsSync(entryClient)) {
+      entry = entryClient;
+    } else if (fs.existsSync(entrySrc)) {
+      entry = entrySrc;
+    } else {
+      entry = locate(context);
+    }
+    // entry = require.resolve(MAIN, { paths: [
+    //   toContext('src/client'),
+    //   toContext('client'),
+    //   toContext('src'),
+    //   context,
+    // ] });
   }
   let dist = props.dist || 'dist';
   let filename = props.filename || '[hash].min.js';

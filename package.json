@@ -1,7 +1,7 @@
 {
   "name": "begin-build",
   "main": "index.js",
-  "version": "0.15.0-beta.3",
+  "version": "0.15.0-beta.4",
   "engines": {
     "node": ">=8.9"
   },
@@ -66,7 +66,7 @@
     "css-loader": "^0.28.9",
     "cssnano": "^3.10.0",
     "file-loader": "^1.1.6",
-    "foreman": "^2.0.0",
+    "foreman": "^3.0.0",
     "frow": "^3.0.4",
     "html-loader": "^0.5.5",
     "html-webpack-plugin": "^3.2.0",
