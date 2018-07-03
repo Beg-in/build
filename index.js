@@ -1,6 +1,5 @@
 /* eslint-disable strict, global-require */
 
-require('babel-polyfill');
 let Vue = require('vue');
 // let component = require('./vue.pug');
 let external = require('./external');

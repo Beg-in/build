@@ -11,9 +11,12 @@ let HtmlWebpackPlugin = require('html-webpack-plugin');
 let OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 let MiniCssExtractPlugin = require('mini-css-extract-plugin');
 let assignDeep = require('begin-util/assign-deep');
+let { InjectManifest } = require('workbox-webpack-plugin');
+let WebpackPwaManifest = require('webpack-pwa-manifest');
 
 const MAIN = './index.js';
 const BROWSERS = 'last 2 versions';
+const WORKER = 'sw.js';
 
 module.exports = (opts = {}) => {
   let {
@@ -38,7 +41,9 @@ module.exports = (opts = {}) => {
   props = assignDeep(props.base || {}, props[stage] || {}).client || {};
   const devRoot = url || 'http://localhost';
   props = Object.assign({
+    name: pkg.name,
     version: pkg.version,
+    description: pkg.description,
     isCordova,
     cdn: `https://cdn.${DOMAIN}/`,
     api: `https://api.${DOMAIN}/v1/`,
@@ -78,6 +83,13 @@ module.exports = (opts = {}) => {
   }
   let dist = props.dist || 'dist';
   let filename = props.filename || '[hash].min.js';
+  let base = entry.substring(0, entry.lastIndexOf('/'));
+  let worker = Object.assign({
+    swSrc: WORKER,
+    swDest: WORKER,
+  }, props.worker || {});
+  worker.swSrc = path.join(base, worker.swSrc);
+  props.worker = worker.swDest;
   delete props.entry;
   delete props.dist;
   delete props.filename;
@@ -158,7 +170,8 @@ module.exports = (opts = {}) => {
         exclude: /node_modules\/(?!begin-)/,
         loader: 'babel-loader',
         options: {
-          presets: [['env', { targets: { browsers: [BROWSERS] }, useBuiltIns: true }]],
+          presets: ['stage-3', ['env', { targets: { browsers: [BROWSERS] }, useBuiltIns: true }]],
+          plugins: ['external-helpers', 'transform-runtime'],
         },
       }, {
         test: /\.svg$/,
@@ -207,7 +220,6 @@ module.exports = (opts = {}) => {
     },
   };
 
-  let base = entry.substring(0, entry.lastIndexOf('/'));
   let template = path.join(base, './index.pug');
   if (fs.existsSync(template)) {
     let options = { template, props };
@@ -216,6 +228,22 @@ module.exports = (opts = {}) => {
       options.favicon = favicon;
     }
     config.plugins.push(new HtmlWebpackPlugin(options));
+    config.plugins.push(new WebpackPwaManifest(Object.assign({
+      name: props.title,
+      short_name: props.name,
+      description: props.description,
+      theme_color: props.color,
+      background_color: '#ffffff',
+      orientation: 'portrait-primary',
+      display: 'standalone',
+      start_url: '/',
+      icons: [
+        {
+          src: favicon,
+          sizes: [96, 128, 192, 256, 384, 512, 1024], // multiple sizes
+        },
+      ],
+    }, props.manifest || {})));
   }
 
   if (isLocal) {
@@ -246,6 +274,10 @@ module.exports = (opts = {}) => {
         },
       }),
     ]);
+  }
+
+  if (fs.existsSync(worker.swSrc)) {
+    config.plugins.push(new InjectManifest(worker));
   }
 
   try {
