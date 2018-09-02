@@ -5,18 +5,18 @@ html
   head
     title
       block title
-        | #{props.title}
+        | #{properties.title}
     block meta
       meta(charset="utf-8")
       meta(name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no")
       meta(name="HandheldFriendly" content="true")
-      meta(name="theme-color", content=`${props.color}`)
+      meta(name="theme-color", content=`${properties.color}`)
       block description
-        meta(name="description", content=`${props.description}`)
+        meta(name="description", content=`${properties.description}`)
   body
     block noscript
       noscript
-        | Sorry, #{props.name} requires that you have JavaScript enabled.
+        | Sorry, #{properties.name} requires that you have JavaScript enabled.
         +external(href="https://www.enable-javascript.com/") See here for instructions.
     block body
       #app
