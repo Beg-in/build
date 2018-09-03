@@ -2,8 +2,11 @@
 
 /* eslint-disable global-require, import/no-dynamic-require, security/detect-non-literal-require */
 let path = require('path');
+let assignDeep = require('begin-util/assign-deep');
+let { isObject, isFunction } = require('begin-util');
 let properties = require('./config/properties');
 let main = require('./config/main');
+let parts = require('./config/default');
 
 module.exports = (options = {}, argv = {}) => {
   let {
@@ -34,13 +37,37 @@ module.exports = (options = {}, argv = {}) => {
   api.properties = properties(api);
   Object.assign(api, main(api));
 
-  // let config;
-  // try {
-  //   let contextConfig = require(api.toContext('build.config'));
-  //   config = contextConfig(Object.assign(options, { context, port, config, toContext, props, pug }));
-  // } catch (e) {
-  //   console.warn('No webpack config found in project');
-  // }
+  parts = api.properties.config || parts;
 
-  // return config;
+  let merged = Object.values(parts).reduce((part, config) =>
+    assignDeep(config, part(Object.assign({ config }, api))), {});
+
+  let build = tree => {
+    let { $build } = tree;
+    delete tree.$build;
+    Object.entries(tree).reduce(([key, value], out) => {
+      if (key === '$when') {
+        return out;
+      }
+      if (isObject(value)) {
+        if (value.$when === false) {
+          return out;
+        }
+        out[key] = build(value);
+        return out;
+      }
+      out[key] = value;
+      return out;
+    }, {});
+    if ($build) {
+      if ($build === Array) {
+        return Object.values(tree);
+      } else if (isFunction($build)) {
+        return $build.call(tree, ...Object.values(tree));
+      }
+    }
+    return tree;
+  };
+
+  return build(merged);
 };
