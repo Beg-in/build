@@ -3,7 +3,7 @@
 let assignDeep = require('begin-util/assign-deep');
 
 module.exports = api => {
-  let { properties, mode, development, url, port, package: {
+  let { properties, stage, development, url, port, package: {
     name, version, description, domain = 'localhost',
   } } = api;
 
@@ -14,12 +14,12 @@ module.exports = api => {
       browsers: 'last 2 versions',
     },
     public: {
-      mode,
+      stage,
       name,
       version,
       description,
     },
-  }, properties.base || {}, properties[mode] || {}, !development ? {} : {
+  }, properties.base || {}, properties[stage] || {}, !development ? {} : {
     public: {
       cdn: '/',
       api: `${url}:${~~port + 1}/v1/`,

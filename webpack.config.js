@@ -3,27 +3,29 @@
 /* eslint-disable global-require, import/no-dynamic-require, security/detect-non-literal-require */
 let path = require('path');
 let assignDeep = require('begin-util/assign-deep');
-let { isObject, isFunction } = require('begin-util');
+let { isRegex, isObject, isFunction } = require('begin-util');
 let properties = require('./config/properties');
 let main = require('./config/main');
 let parts = require('./config/default');
 
 module.exports = (options = {}, argv = {}) => {
+  let { mode = 'production' } = argv;
   let {
+    stage = mode,
     context = process.cwd(),
     url = 'http://localhost',
     port = 8080,
   } = options;
-  let { mode } = argv;
 
   let api = {
     options,
     argv,
     package: require(path.join(context, 'package')),
+    mode,
+    stage,
     context,
     url,
     port,
-    mode,
     dir: __dirname,
     toContext: (...args) => path.join(context, ...args),
     development: mode === 'development',
@@ -39,17 +41,17 @@ module.exports = (options = {}, argv = {}) => {
 
   parts = api.properties.config || parts;
 
-  let merged = Object.values(parts).reduce((part, config) =>
+  let merged = Object.values(parts).reduce((config, part) =>
     assignDeep(config, part(Object.assign({ config }, api))), {});
 
   let build = tree => {
     let { $build } = tree;
     delete tree.$build;
-    Object.entries(tree).reduce(([key, value], out) => {
+    tree = Object.entries(tree).reduce((out, [key, value]) => {
       if (key === '$when') {
         return out;
       }
-      if (isObject(value)) {
+      if (!isRegex(value) && isObject(value)) {
         if (value.$when === false) {
           return out;
         }
