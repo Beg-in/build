@@ -16,6 +16,7 @@ module.exports = ({ base }) => {
         $when: fs.existsSync(template),
         $build: options => new HtmlWebpackPlugin(options),
         options: {
+          chunks: ['main'],
           template,
           favicon: {
             $when: fs.existsSync(favicon),

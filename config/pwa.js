@@ -14,7 +14,6 @@ module.exports = ({ base, properties, config }) => {
     swDest: WORKER,
   }, properties.worker || {});
   options.swSrc = path.join(base, options.swSrc);
-  properties.public.worker = options.swDest;
 
   return {
     plugins: {
@@ -41,8 +40,19 @@ module.exports = ({ base, properties, config }) => {
       },
       injectManifest: {
         $when: fs.existsSync(options.swSrc),
-        $build: options => new InjectManifest(options),
+        $build: (...args) => new InjectManifest(...args),
         options,
+      },
+      define: {
+        options: {
+          'process.env': {
+            PROPERTIES: {
+              options: {
+                worker: options.swDest,
+              },
+            },
+          },
+        },
       },
     },
   };

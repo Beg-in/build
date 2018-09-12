@@ -7,8 +7,6 @@ let styles = require('./styles');
 let markup = require('./markup');
 let images = require('./images');
 let fonts = require('./fonts');
-let pwa = require('./pwa');
-let vue = require('./vue');
 
 module.exports = {
   base,
@@ -18,6 +16,6 @@ module.exports = {
   markup, // depends on base
   images,
   fonts,
-  pwa, // depends on index
-  vue, // overrides styles depends on markup
+  // pwa, // depends on index
+  // vue, // overrides styles depends on markup
 };

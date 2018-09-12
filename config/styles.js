@@ -27,7 +27,6 @@ module.exports = ({ development, properties: { browsers } }) => ({
             loader: 'css-loader',
             options: {
               sourceMap: true,
-              importLoaders: 2,
             },
           },
           postcss: {
@@ -46,7 +45,9 @@ module.exports = ({ development, properties: { browsers } }) => ({
                 cssnano: {
                   $when: !development,
                   $build: cssnano,
-                  options: { preset: 'default' },
+                  options: {
+                    preset: 'default',
+                  },
                 },
               },
             },
@@ -55,6 +56,7 @@ module.exports = ({ development, properties: { browsers } }) => ({
             loader: 'sass-loader',
             options: {
               sourceMap: true,
+              indentedSyntax: true,
             },
           },
         },
@@ -64,6 +66,7 @@ module.exports = ({ development, properties: { browsers } }) => ({
   plugins: {
     $build: Array,
     extractCss: {
+      $when: !development,
       $build: (...args) => new MiniCssExtractPlugin(...args),
       options: {
         filename: '[contenthash].css',

@@ -4,11 +4,12 @@ module.exports = ({ properties: { browsers } }) => ({
   module: {
     rules: {
       $build: Array,
-      js: {
+      scripts: {
         test: /\.js$/,
         exclude: /node_modules\/(?!begin-)/,
         loader: 'babel-loader',
         options: {
+          sourceType: 'unambiguous',
           presets: {
             $build: Array,
             env: {

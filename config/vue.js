@@ -1,6 +1,6 @@
 'use strict';
 
-let { VueLoaderPlugin } = require('vue-loader');
+let VueLoaderPlugin = require('vue-loader/lib/plugin');
 
 module.exports = ({ config, development }) => ({
   module: {
@@ -9,14 +9,6 @@ module.exports = ({ config, development }) => ({
       vue: {
         test: /\.vue$/,
         loader: 'vue-loader',
-      },
-      vuePug: {
-        test: /vue\.pug$/,
-        use: {
-          $build: Array,
-          vue: 'vue-loader',
-          pug: config.module.rules.markup.use.pug,
-        },
       },
       styles: {
         use: {
@@ -28,7 +20,25 @@ module.exports = ({ config, development }) => ({
         },
       },
       markup: {
-        exclude: /vue\.pug$/,
+        use: undefined,
+        oneOf: {
+          $build: Array,
+          vue: {
+            resourceQuery: /^\?vue/,
+            loader: config.module.rules.markup.use.pug,
+          },
+          vuePug: {
+            test: /vue\.pug$/,
+            use: {
+              $build: Array,
+              vue: 'vue-loader',
+              pug: config.module.rules.markup.use.pug,
+            },
+          },
+          pug: {
+            use: config.module.rules.markup.use,
+          },
+        },
       },
       svg: {
         test: /\.svg$/,

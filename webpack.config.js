@@ -6,18 +6,19 @@ let assignDeep = require('begin-util/assign-deep');
 let { isRegex, isObject, isFunction } = require('begin-util');
 let properties = require('./config/properties');
 let main = require('./config/main');
-let parts = require('./config/default');
 
 module.exports = (options = {}, argv = {}) => {
-  let { mode = 'production' } = argv;
   let {
-    stage = mode,
+    stage = 'production',
     context = process.cwd(),
     url = 'http://localhost',
     port = 8080,
   } = options;
+  let development = stage === 'development';
+  let { mode = development ? 'development' : 'production' } = argv;
 
   let api = {
+    development,
     options,
     argv,
     package: require(path.join(context, 'package')),
@@ -28,18 +29,22 @@ module.exports = (options = {}, argv = {}) => {
     port,
     dir: __dirname,
     toContext: (...args) => path.join(context, ...args),
-    development: mode === 'development',
     properties: {},
   };
   try {
     api.properties = require(path.join(api.context, 'properties'));
   } catch (e) {
-    // intentionally empty
+    console.warn('properties.js not found in project');
   }
   api.properties = properties(api);
   Object.assign(api, main(api));
 
-  parts = api.properties.config || parts;
+  let parts;
+  if (isFunction(api.properties.config)) {
+    parts = api.properties.config(api);
+  } else {
+    parts = Object.assign({}, require('./config/basic'));
+  }
 
   let merged = Object.values(parts).reduce((config, part) =>
     assignDeep(config, part(Object.assign({ config }, api))), {});
@@ -48,7 +53,7 @@ module.exports = (options = {}, argv = {}) => {
     let { $build } = tree;
     delete tree.$build;
     tree = Object.entries(tree).reduce((out, [key, value]) => {
-      if (key === '$when') {
+      if (key === '$when' || value === undefined) {
         return out;
       }
       if (!isRegex(value) && isObject(value)) {
@@ -64,7 +69,8 @@ module.exports = (options = {}, argv = {}) => {
     if ($build) {
       if ($build === Array) {
         return Object.values(tree);
-      } else if (isFunction($build)) {
+      }
+      if (isFunction($build)) {
         return $build.call(tree, ...Object.values(tree));
       }
     }

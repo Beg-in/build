@@ -2,13 +2,28 @@
 
 let assignDeep = require('begin-util/assign-deep');
 
-module.exports = api => {
-  let { properties, stage, development, url, port, package: {
-    name, version, description, domain = 'localhost',
-  } } = api;
+module.exports = ({
+  properties,
+  stage,
+  development,
+  url,
+  port,
+  package: {
+    name,
+    version,
+    description,
+  },
+}) => {
+  let domain = (properties
+    && properties.production
+    && properties.production.build
+    && properties.production.build.domain) || name;
 
   properties = assignDeep({
     build: {
+      cdn: `https://cdn.${domain}/`,
+      api: `https://api.${domain}/v1/`,
+      root: `https://${domain}/`,
       domain,
       dist: 'dist',
       browsers: 'last 2 versions',
@@ -19,21 +34,22 @@ module.exports = api => {
       version,
       description,
     },
-  }, properties.base || {}, properties[stage] || {}, !development ? {} : {
-    public: {
-      cdn: '/',
-      api: `${url}:${~~port + 1}/v1/`,
-      root: `${url}:${port}/`,
-    },
+  }, properties.production || {});
+  if (properties[stage]) {
+    properties = assignDeep(properties, properties[stage]);
+  }
+  if (development) {
+    properties = assignDeep(properties, {
+      build: {
+        cdn: '/',
+        api: `${url}:${~~port + 1}/v1/`,
+        root: `${url}:${port}/`,
+      },
+    });
+  }
+
+  let { cdn, api, root } = properties.build;
+  return Object.assign(properties.build, {
+    public: Object.assign({ cdn, api, root }, properties.public),
   });
-
-  properties.public = Object.assign({
-    cdn: `https://cdn.${properties.build.domain}/`,
-    api: `https://api.${properties.build.domain}/v1/`,
-    root: `https://${properties.build.domain}/`,
-  }, properties.public);
-
-  Object.assign(properties, properties.build, properties.public);
-
-  return properties;
 };

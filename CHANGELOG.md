@@ -1,10 +1,39 @@
+<a name="0.15.0"></a>
+# [0.15.0](https://github.com/Beg-in/build/compare/0.15.0-beta.3...0.15.0) (2018-09-12)
+
+
+### Bug Fixes
+
+* **webpack:** fix resolve in Node LTS ([2b36733](https://github.com/Beg-in/build/commit/2b36733))
+
+
+### Features
+
+* **webpack:** add worker support with workbox ([734eef3](https://github.com/Beg-in/build/commit/734eef3))
+* **webpack:** new merging style live ([6faf39a](https://github.com/Beg-in/build/commit/6faf39a))
+* **webpack:** now uses merge style for extensibility ([37cf295](https://github.com/Beg-in/build/commit/37cf295))
+
+
+
+<a name="0.15.0-beta.3"></a>
+# [0.15.0-beta.3](https://github.com/Beg-in/build/compare/0.14.0...0.15.0-beta.3) (2018-05-31)
+
+
+### Bug Fixes
+
+* **webpack:** disabled sass-loader options since broken ([4762444](https://github.com/Beg-in/build/commit/4762444))
+* **webpack:** exclude node_modules to fix undefined umd global ([696a5b1](https://github.com/Beg-in/build/commit/696a5b1))
+* **webpack:** fix pug resolve for some file includes ([7c172c4](https://github.com/Beg-in/build/commit/7c172c4))
+
+
+
 <a name="0.14.0"></a>
 # [0.14.0](https://github.com/Beg-in/build/compare/0.13.0...0.14.0) (2018-02-28)
 
 
 ### Bug Fixes
 
-* **router:** fix initial routing with service system ([0e69ac7](https://github.com/Beg-in/build/commit/0e69ac7))
+* **router:** fix initial routing with service system ([c834c6a](https://github.com/Beg-in/build/commit/c834c6a))
 
 
 

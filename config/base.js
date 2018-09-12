@@ -6,13 +6,14 @@ let webpack = require('webpack');
 
 module.exports = ({ mode, main, properties, dir, context, toContext, development }) => ({
   mode,
+  devtool: development ? 'eval-source-map' : 'source-map',
   entry: {
     main,
   },
   output: {
     path: toContext(properties.dist),
     publicPath: properties.cdn,
-    filename: properties.filename ||  '[contenthash].js',
+    filename: development ? '[id].js' : '[contenthash].js',
   },
   plugins: {
     $build: Array,
