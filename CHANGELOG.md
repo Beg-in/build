@@ -1,3 +1,18 @@
+<a name="0.16.0"></a>
+# [0.16.0](https://github.com/Beg-in/build/compare/0.15.0...0.16.0) (2018-09-12)
+
+
+### Bug Fixes
+
+* **properties:** now reads from new env variable name ([855c8e2](https://github.com/Beg-in/build/commit/855c8e2))
+
+
+### BREAKING CHANGES
+
+* **properties:** props renamed to properties
+
+
+
 <a name="0.15.0"></a>
 # [0.15.0](https://github.com/Beg-in/build/compare/0.15.0-beta.3...0.15.0) (2018-09-12)
 
@@ -10,7 +25,7 @@
 ### Features
 
 * **webpack:** add worker support with workbox ([734eef3](https://github.com/Beg-in/build/commit/734eef3))
-* **webpack:** new merging style live ([6faf39a](https://github.com/Beg-in/build/commit/6faf39a))
+* **webpack:** new merging style live ([df72a89](https://github.com/Beg-in/build/commit/df72a89))
 * **webpack:** now uses merge style for extensibility ([37cf295](https://github.com/Beg-in/build/commit/37cf295))
 
 

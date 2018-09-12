@@ -1,6 +1,6 @@
 let axios = require('axios');
-let props = require('../props');
+let { api } = require('../properties');
 
 module.exports = axios.create({
-  baseURL: props.api,
+  baseURL: api,
 });

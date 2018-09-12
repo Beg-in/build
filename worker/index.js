@@ -1,4 +1,4 @@
-let { cdn, worker } = require('../props');
+let { cdn, worker } = require('../properties');
 
 const ready = new Promise((resolve, reject) => {
   if ('serviceWorker' in navigator) {
