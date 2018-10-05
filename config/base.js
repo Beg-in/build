@@ -21,6 +21,7 @@ module.exports = ({ mode, main, properties, dir, context, toContext, development
       $build: options => new webpack.DefinePlugin(options),
       options: {
         'process.env': {
+          NODE_ENV: development ? '"development"' : '"production"',
           PROPERTIES: {
             $build: options => `${JSON.stringify(options)}`,
             options: properties.public,

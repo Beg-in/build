@@ -1,10 +1,20 @@
+<a name="0.16.1"></a>
+## [0.16.1](https://github.com/Beg-in/build/compare/0.16.0...0.16.1) (2018-10-05)
+
+
+### Bug Fixes
+
+* **webpack:** provide NODE_ENV environment variable ([ea4542b](https://github.com/Beg-in/build/commit/ea4542b))
+
+
+
 <a name="0.16.0"></a>
 # [0.16.0](https://github.com/Beg-in/build/compare/0.15.0...0.16.0) (2018-09-12)
 
 
 ### Bug Fixes
 
-* **properties:** now reads from new env variable name ([855c8e2](https://github.com/Beg-in/build/commit/855c8e2))
+* **properties:** now reads from new env variable name ([2a92758](https://github.com/Beg-in/build/commit/2a92758))
 
 
 ### BREAKING CHANGES
