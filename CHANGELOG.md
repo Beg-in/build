@@ -1,10 +1,20 @@
+<a name="0.16.2"></a>
+## [0.16.2](https://github.com/Beg-in/build/compare/0.16.1...0.16.2) (2018-10-17)
+
+
+### Features
+
+* **store:** add auth module ([31bb1e3](https://github.com/Beg-in/build/commit/31bb1e3))
+
+
+
 <a name="0.16.1"></a>
 ## [0.16.1](https://github.com/Beg-in/build/compare/0.16.0...0.16.1) (2018-10-05)
 
 
 ### Bug Fixes
 
-* **webpack:** provide NODE_ENV environment variable ([ea4542b](https://github.com/Beg-in/build/commit/ea4542b))
+* **webpack:** provide NODE_ENV environment variable ([5454cde](https://github.com/Beg-in/build/commit/5454cde))
 
 
 

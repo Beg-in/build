@@ -12,41 +12,54 @@ module.exports = ({ development, properties: { browsers } }) => ({
       $build: Array,
       styles: {
         test: /\.(sa|sc|c)ss$/,
-        use: {
-          $build: Array,
-          style: {
-            $when: development,
-            loader: 'style-loader',
-            options: { sourceMap: true },
+        oneOf: {
+          $build: (use, sass) => {
+            use = Object.values(use);
+            return [{
+              test: /\.sass$/,
+              use: use.concat([{
+                loader: sass.loader,
+                options: Object.assign({
+                  indentedSyntax: true,
+                }, sass.options),
+              }]),
+            }, { use }];
           },
-          extract: {
-            $when: !development,
-            loader,
-          },
-          css: {
-            loader: 'css-loader',
-            options: {
-              sourceMap: true,
+          use: {
+            style: {
+              $when: development,
+              loader: 'style-loader',
+              options: { sourceMap: true },
             },
-          },
-          postcss: {
-            loader: 'postcss-loader',
-            options: {
-              sourceMap: true,
-              ident: 'postcss',
-              plugins: {
-                $build: Array,
-                env: {
-                  $build: env,
-                  options: {
-                    browsers,
+            extract: {
+              $when: !development,
+              loader,
+            },
+            css: {
+              loader: 'css-loader',
+              options: {
+                sourceMap: true,
+              },
+            },
+            postcss: {
+              loader: 'postcss-loader',
+              options: {
+                sourceMap: true,
+                ident: 'postcss',
+                plugins: {
+                  $build: Array,
+                  env: {
+                    $build: env,
+                    options: {
+                      browsers,
+                    },
                   },
-                },
-                cssnano: {
-                  $when: !development,
-                  $build: cssnano,
-                  options: {
-                    preset: 'default',
+                  cssnano: {
+                    $when: !development,
+                    $build: cssnano,
+                    options: {
+                      preset: 'default',
+                    },
                   },
                 },
               },
@@ -56,7 +69,6 @@ module.exports = ({ development, properties: { browsers } }) => ({
             loader: 'sass-loader',
             options: {
               sourceMap: true,
-              indentedSyntax: true,
             },
           },
         },

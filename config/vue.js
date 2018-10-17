@@ -11,11 +11,12 @@ module.exports = ({ config, development }) => ({
         loader: 'vue-loader',
       },
       styles: {
-        use: {
-          $build: Array,
-          style: {
-            $when: development,
-            loader: 'vue-style-loader',
+        oneOf: {
+          use: {
+            style: {
+              $when: development,
+              loader: 'vue-style-loader',
+            },
           },
         },
       },
