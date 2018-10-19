@@ -1,5 +1,5 @@
 let api = require('../api');
-let { store, getHelpers } = require('../store');
+let { store, registerModule } = require('../store');
 let router = require('../router');
 
 const CSRF_HEADER = 'x-csrf-token';
@@ -12,22 +12,18 @@ let setHeaders = ({ access, csrfToken }) => {
 };
 
 const NAMESPACE = '$auth';
-const LOG_IN_ENDPOINT = 'profile/login';
-const LOG_OUT_ENDPOINT = 'profile/logout';
-const LOG_IN_ROUTE = 'log-in';
-const FORBIDDEN_ROUTE = 'home';
+const CONFIG = {
+  logInEndpoint: 'profile/login',
+  logOutEndpoint: 'profile/logout',
+  logInRoute: 'auth',
+  forbiddenRoute: 'home',
+};
 
-store.registerModule(NAMESPACE, {
-  namespaced: true,
+module.exports = registerModule(NAMESPACE, {
   persist: true,
 
   state: {
-    logInEndpoint: LOG_IN_ENDPOINT,
-    logOutEndpoint: LOG_OUT_ENDPOINT,
-    logInRoute: LOG_IN_ROUTE,
-    forbiddenRoute: FORBIDDEN_ROUTE,
     profile: null,
-    organization: null,
     access: null,
     csrfToken: null,
     isLoggedIn: false,
@@ -51,34 +47,14 @@ store.registerModule(NAMESPACE, {
       state.isLoggedIn = false;
     },
 
-    setConfig(state, {
-      logInEndpoint = state.logInEndpoint,
-      logOutEndpoint = state.logOutEndpoint,
-      logInRoute = state.logInRoute,
-      forbiddenRoute = state.forbiddenRoute,
-    } = {}) {
-      Object.assign(state, {
-        logInEndpoint,
-        logOutEndpoint,
-        logInRoute,
-        forbiddenRoute,
-      });
+    setConfig(state, options = {}) {
+      Object.assign(CONFIG, options);
     },
   },
 
   getters: {
-    config({
-      logInEndpoint,
-      logOutEndpoint,
-      logInRoute,
-      forbiddenRoute,
-    }) {
-      return {
-        logInEndpoint,
-        logOutEndpoint,
-        logInRoute,
-        forbiddenRoute,
-      };
+    config() {
+      return CONFIG;
     },
 
     isLoggedIn(state) {
@@ -172,5 +148,3 @@ store.registerModule(NAMESPACE, {
     },
   },
 });
-
-module.exports = getHelpers(NAMESPACE);

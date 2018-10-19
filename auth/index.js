@@ -1,7 +1,7 @@
 let { password, email } = require('begin-util/validate');
 let api = require('../api');
 let { mapActions: mapAlertsActions } = require('../alerts');
-let { mapActions: mapAuthActions, mapMutations: mapAuthMutations } = require('../store/auth');
+let { mapActions: mapAuthActions, mapMutations: mapAuthMutations } = require('./store');
 
 const RESET = 'reset';
 const FORGOT = 'forgot';
@@ -21,11 +21,11 @@ module.exports = {
 
   computed: {
     emailCheck() {
-      email.required.test(this.email);
+      return email.required.test(this.email);
     },
 
     passwordCheck() {
-      password.required.test(this.password);
+      return password.required.test(this.password);
     },
 
     viewType() {
@@ -131,7 +131,7 @@ module.exports = {
     },
 
     async forgot() {
-      if (!this.emailCheck()) {
+      if (!this.emailCheck) {
         this.error('Invalid email address');
         return;
       }
@@ -152,7 +152,7 @@ module.exports = {
         this.error('Missing reset token');
         return;
       }
-      if (!this.passwordCheck()) {
+      if (!this.passwordCheck) {
         this.error('Invalid new password');
         return;
       }
@@ -176,11 +176,11 @@ module.exports = {
     },
 
     async create() {
-      if (!this.emailCheck()) {
+      if (!this.emailCheck) {
         this.error('Invalid email address');
         return;
       }
-      if (!this.passwordCheck()) {
+      if (!this.passwordCheck) {
         this.error('Invalid password');
         return;
       }
@@ -200,7 +200,7 @@ module.exports = {
     },
 
     async signIn() {
-      if (!this.emailCheck()) {
+      if (!this.emailCheck) {
         this.error('Invalid email address');
         return;
       }

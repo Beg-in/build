@@ -1,10 +1,20 @@
+<a name="0.16.4"></a>
+## [0.16.4](https://github.com/Beg-in/build/compare/0.16.3...0.16.4) (2018-10-19)
+
+
+### Bug Fixes
+
+* **auth:** fix store persist functionality ([d3a933b](https://github.com/Beg-in/build/commit/d3a933b))
+
+
+
 <a name="0.16.3"></a>
 ## [0.16.3](https://github.com/Beg-in/build/compare/0.16.2...0.16.3) (2018-10-19)
 
 
 ### Features
 
-* **auth:** add auth component and template ([1048955](https://github.com/Beg-in/build/commit/1048955))
+* **auth:** add auth component and template ([ee1f221](https://github.com/Beg-in/build/commit/ee1f221))
 
 
 

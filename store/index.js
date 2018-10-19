@@ -14,6 +14,7 @@ let store = new Vuex.Store({
 
   mutations: {
     [RESTORE](context, path) {
+      // context[path] = context[path] || {};
       Object.assign(context[path], localstorage.get(getKey(path)));
     },
   },
@@ -45,18 +46,23 @@ let register = (id, obj) => {
 let getHelpers = namespace => {
   let helpers = Vuex.createNamespacedHelpers(namespace);
   helpers.bound = Object.assign({}, helpers);
-  helpers.bound = mapObject(helpers, helper =>
-    (...args) => mapObject(helper(...args), fn => fn.bind({ $store: store })));
+  helpers.bound = mapObject(
+    helpers,
+    helper => (...args) => mapObject(helper(...args), fn => fn.bind({ $store: store })),
+  );
   return helpers;
 };
 let { bound: { mapActions } } = getHelpers(PERSIST);
 let $persist = mapActions(['restore', 'set', 'clear']);
 let persisting = [];
 
-module.exports = Object.assign((id, obj) => {
+let registerModule = (path, obj, named = true) => {
   obj.namespaced = true;
-  register(id, obj);
-  let path = modules[id];
+  if (named) {
+    store.registerModule(path, obj);
+  } else {
+    register(path, obj);
+  }
   let helpers = getHelpers(path);
   if (obj.persist) {
     persisting.push(path);
@@ -67,11 +73,14 @@ module.exports = Object.assign((id, obj) => {
     bound.init();
   }
   return helpers;
-}, {
+};
+
+module.exports = Object.assign((id, obj) => registerModule(id, obj, false), {
   store,
   PERSIST,
   $persist,
   getHelpers,
+  registerModule,
 
   context(appModule, context) {
     if (module.hot) {
@@ -97,7 +106,9 @@ module.exports = Object.assign((id, obj) => {
 });
 
 store.subscribe(({ type }) => {
+  console.log('TYPE', type);
   let path = type.substring(0, type.lastIndexOf('/'));
+  console.log('PATH', path);
   if (persisting.includes(path)) {
     $persist.set(path);
   }
