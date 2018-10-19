@@ -106,9 +106,7 @@ module.exports = Object.assign((id, obj) => registerModule(id, obj, false), {
 });
 
 store.subscribe(({ type }) => {
-  console.log('TYPE', type);
   let path = type.substring(0, type.lastIndexOf('/'));
-  console.log('PATH', path);
   if (persisting.includes(path)) {
     $persist.set(path);
   }

@@ -1,10 +1,15 @@
+<a name="0.16.5"></a>
+## [0.16.5](https://github.com/Beg-in/build/compare/0.16.4...0.16.5) (2018-10-19)
+
+
+
 <a name="0.16.4"></a>
 ## [0.16.4](https://github.com/Beg-in/build/compare/0.16.3...0.16.4) (2018-10-19)
 
 
 ### Bug Fixes
 
-* **auth:** fix store persist functionality ([d3a933b](https://github.com/Beg-in/build/commit/d3a933b))
+* **auth:** fix store persist functionality ([fd2f49e](https://github.com/Beg-in/build/commit/fd2f49e))
 
 
 
