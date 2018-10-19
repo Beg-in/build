@@ -1,0 +1,52 @@
+form(@submit.prevent="submit()")
+  .frow.gutters(v-if="showCreateFields")
+    block details
+      .col-md-1-2
+          label First Name
+            input(
+              v-model="firstName"
+              type="text"
+              maxlength="254"
+              required=""
+              name="firstName"
+            )
+      .col-md-1-2
+          label Last Name
+            input(
+              v-model="lastName"
+              type="text"
+              maxlength="254"
+              required=""
+              name="lastName"
+            )
+  .frow.column-start
+      label(v-if="showEmailField") Email
+        input(
+          v-model="email"
+          type="text"
+          maxlength="254"
+          required=""
+          name="email"
+        )
+      label(v-if="showPasswordField") Password
+        input.sign-up-password(
+          v-model="password"
+          type="password"
+          required=""
+          name="password"
+        )
+  .frow.column-center
+    .remember(v-if="showRememberField")
+      block remember
+        label.row-start
+          input(type="checkbox" v-model="remember")
+          | Remember Me
+    button.log-in-button(type="submit", :disabled="disabled") Go
+    block tos
+    .links
+      .frow(v-if="!showLoginFields")
+        a(@click.prevent="showLogin") Log into existing account
+      .frow(v-if="!showCreateFields")
+        a(@click.prevent="showCreate") Create a new account
+      .frow(v-if="showLoginFields")
+        a(@click.prevent="showForgot") Forget your password?

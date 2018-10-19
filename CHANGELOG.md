@@ -1,10 +1,20 @@
+<a name="0.16.3"></a>
+## [0.16.3](https://github.com/Beg-in/build/compare/0.16.2...0.16.3) (2018-10-19)
+
+
+### Features
+
+* **auth:** add auth component and template ([1048955](https://github.com/Beg-in/build/commit/1048955))
+
+
+
 <a name="0.16.2"></a>
 ## [0.16.2](https://github.com/Beg-in/build/compare/0.16.1...0.16.2) (2018-10-17)
 
 
 ### Features
 
-* **store:** add auth module ([31bb1e3](https://github.com/Beg-in/build/commit/31bb1e3))
+* **store:** add auth module ([167448b](https://github.com/Beg-in/build/commit/167448b))
 
 
 
