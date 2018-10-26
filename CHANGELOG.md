@@ -1,3 +1,13 @@
+<a name="0.16.6"></a>
+## [0.16.6](https://github.com/Beg-in/build/compare/0.16.5...0.16.6) (2018-10-26)
+
+
+### Bug Fixes
+
+* **store:** missing path from register ([524535c](https://github.com/Beg-in/build/commit/524535c))
+
+
+
 <a name="0.16.5"></a>
 ## [0.16.5](https://github.com/Beg-in/build/compare/0.16.4...0.16.5) (2018-10-19)
 

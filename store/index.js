@@ -41,7 +41,9 @@ let store = new Vuex.Store({
 });
 let modules = {};
 let register = (id, obj) => {
-  store.registerModule(modules[id], obj);
+  let path = modules[id];
+  store.registerModule(path, obj);
+  return path;
 };
 let getHelpers = namespace => {
   let helpers = Vuex.createNamespacedHelpers(namespace);
@@ -61,7 +63,7 @@ let registerModule = (path, obj, named = true) => {
   if (named) {
     store.registerModule(path, obj);
   } else {
-    register(path, obj);
+    path = register(path, obj);
   }
   let helpers = getHelpers(path);
   if (obj.persist) {
@@ -93,6 +95,7 @@ module.exports = Object.assign((id, obj) => registerModule(id, obj, false), {
           hot.push(id);
           store.registerModule(path, obj);
         }
+        return path;
       };
       appModule.hot.accept(context.id, () => {});
     }
