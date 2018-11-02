@@ -1,9 +1,14 @@
 const TEST = '_TEST_LOCALSTORAGE_AVAILABLE_';
-let storage = window.localStorage;
+let storage;
 
 try {
-  window.sessionStorage.setItem(TEST, '1');
-  window.sessionStorage.removeItem(TEST);
+  if (typeof window !== 'undefined') {
+    storage = window.localStorage
+    window.sessionStorage.setItem(TEST, '1');
+    window.sessionStorage.removeItem(TEST);
+  } else {
+    throw new Error('no window');
+  }
 } catch (error) {
   // In-memory storage when localStorage is not available, e.g. iOS private browsing mode.
   let data = {};

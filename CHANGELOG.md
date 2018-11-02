@@ -1,10 +1,20 @@
+<a name="0.16.9"></a>
+## [0.16.9](https://github.com/Beg-in/build/compare/0.16.8...0.16.9) (2018-11-02)
+
+
+### Bug Fixes
+
+* **ssr:** account for no window in localstorage ([d50fc58](https://github.com/Beg-in/build/commit/d50fc58))
+
+
+
 <a name="0.16.8"></a>
 ## [0.16.8](https://github.com/Beg-in/build/compare/0.16.7...0.16.8) (2018-11-02)
 
 
 ### Features
 
-* **ssr:** support vue server side rendering ([6850f0e](https://github.com/Beg-in/build/commit/6850f0e))
+* **ssr:** support vue server side rendering ([75bad59](https://github.com/Beg-in/build/commit/75bad59))
 
 
 
