@@ -15,6 +15,8 @@ module.exports = component => {
       return createElement('app');
     },
   }, component));
-  component.vm.$mount('#app');
+  if (typeof window !== 'undefined') {
+    component.vm.$mount('#app');
+  }
   return component;
 };

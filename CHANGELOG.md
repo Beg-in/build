@@ -1,3 +1,13 @@
+<a name="0.16.8"></a>
+## [0.16.8](https://github.com/Beg-in/build/compare/0.16.7...0.16.8) (2018-11-02)
+
+
+### Features
+
+* **ssr:** support vue server side rendering ([6850f0e](https://github.com/Beg-in/build/commit/6850f0e))
+
+
+
 <a name="0.16.7"></a>
 ## [0.16.7](https://github.com/Beg-in/build/compare/0.16.6...0.16.7) (2018-10-26)
 
