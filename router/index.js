@@ -19,7 +19,7 @@ module.exports = {
     router.beforeEach((to, from, next) => {
       if (first) {
         first = false;
-        initial = to;
+        initial = Object.assign({}, to);
         next(false);
       } else {
         next();

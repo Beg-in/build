@@ -1,10 +1,20 @@
+<a name="0.16.11"></a>
+## [0.16.11](https://github.com/Beg-in/build/compare/0.16.10...0.16.11) (2018-11-07)
+
+
+### Bug Fixes
+
+* **ssr:** route gaurd to now modifiable ([0a3db39](https://github.com/Beg-in/build/commit/0a3db39))
+
+
+
 <a name="0.16.10"></a>
 ## [0.16.10](https://github.com/Beg-in/build/compare/0.16.9...0.16.10) (2018-11-07)
 
 
 ### Features
 
-* **ssr:** support initial route ([9513df5](https://github.com/Beg-in/build/commit/9513df5))
+* **ssr:** support initial route ([5772443](https://github.com/Beg-in/build/commit/5772443))
 
 
 
