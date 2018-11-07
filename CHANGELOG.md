@@ -1,10 +1,20 @@
+<a name="0.16.10"></a>
+## [0.16.10](https://github.com/Beg-in/build/compare/0.16.9...0.16.10) (2018-11-07)
+
+
+### Features
+
+* **ssr:** support initial route ([9513df5](https://github.com/Beg-in/build/commit/9513df5))
+
+
+
 <a name="0.16.9"></a>
 ## [0.16.9](https://github.com/Beg-in/build/compare/0.16.8...0.16.9) (2018-11-02)
 
 
 ### Bug Fixes
 
-* **ssr:** account for no window in localstorage ([d50fc58](https://github.com/Beg-in/build/commit/d50fc58))
+* **ssr:** account for no window in localstorage ([2094e90](https://github.com/Beg-in/build/commit/2094e90))
 
 
 

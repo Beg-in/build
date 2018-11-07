@@ -11,11 +11,11 @@ let ready;
 let deferred = new Promise(resolve => {
   ready = resolve;
 });
+let initial;
 
 module.exports = {
   create(config) {
     let router = new VueRouter(Object.assign({}, CONFIG, config));
-    let initial;
     router.beforeEach((to, from, next) => {
       if (first) {
         first = false;
@@ -37,5 +37,9 @@ module.exports = {
   register(routes) {
     module.exports.addRoutes(routes);
     ready();
+  },
+
+  initial(path) {
+    initial = { path };
   },
 };
