@@ -19,7 +19,7 @@ module.exports = ({
     && properties.production.build
     && properties.production.build.domain) || name;
 
-  properties = assignDeep({
+  let out = assignDeep({
     build: {
       cdn: `https://cdn.${domain}/`,
       api: `https://api.${domain}/v1/`,
@@ -27,6 +27,10 @@ module.exports = ({
       domain,
       dist: 'dist',
       browsers: 'last 2 versions',
+      stage,
+      name,
+      version,
+      description,
     },
     public: {
       stage,
@@ -36,10 +40,10 @@ module.exports = ({
     },
   }, properties.production || {});
   if (properties[stage]) {
-    properties = assignDeep(properties, properties[stage]);
+    out = assignDeep(out, properties[stage]);
   }
   if (development) {
-    properties = assignDeep(properties, {
+    out = assignDeep(out, {
       build: {
         cdn: '/',
         api: `${url}:${~~port + 1}/v1/`,
@@ -48,8 +52,8 @@ module.exports = ({
     });
   }
 
-  let { cdn, api, root } = properties.build;
-  return Object.assign(properties.build, {
-    public: Object.assign({ cdn, api, root }, properties.public),
+  let { cdn, api, root } = out.build;
+  return Object.assign(out.build, {
+    public: Object.assign({ cdn, api, root }, out.public),
   });
 };
