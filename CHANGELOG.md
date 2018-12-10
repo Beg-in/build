@@ -1,10 +1,16 @@
-<a name="0.16.11"></a>
-## [0.16.11](https://github.com/Beg-in/build/compare/0.16.10...0.16.11) (2018-11-07)
+<a name="0.16.13"></a>
+## [0.16.13](https://github.com/Beg-in/build/compare/0.16.12...0.16.13) (2018-12-11)
+
+
+
+<a name="0.16.12"></a>
+## [0.16.12](https://github.com/Beg-in/build/compare/0.16.10...0.16.12) (2018-12-10)
 
 
 ### Bug Fixes
 
-* **ssr:** route gaurd to now modifiable ([0a3db39](https://github.com/Beg-in/build/commit/0a3db39))
+* **properties:** merge in stage properties ([830c52d](https://github.com/Beg-in/build/commit/830c52d))
+* **ssr:** route gaurd to now modifiable ([20f9725](https://github.com/Beg-in/build/commit/20f9725))
 
 
 
